@@ -11,15 +11,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('assessment_user', function (Blueprint $table) {
+        Schema::create('assessment_student', function (Blueprint $table) {
             $table->id();
-            $table->integer('grade');
+            $table->integer('grade')->nullable();
             
             $table->unsignedBigInteger('assessment_id');
             $table->foreign('assessment_id')->references('id')->on('assessments');
 
-            $table->unsignedBigInteger('reviewer_id');
-            $table->foreign('reviewer_id')->references('id')->on('users');
+            $table->unsignedBigInteger('student_id');
+            $table->foreign('student_id')->references('id')->on('users');
             
             $table->timestamps();
         });
@@ -30,6 +30,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('assessment_user');
+        Schema::dropIfExists('assessment_student');
     }
 };
