@@ -3,6 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Course;
+use App\Models\User;
+use App\Models\CourseUser;
 
 class CourseController extends Controller
 {
@@ -11,7 +14,10 @@ class CourseController extends Controller
      */
     public function index()
     {
-        //
+        $user = User::inRandomOrder()->first();
+        $courses = $user->courses;
+        
+        return view('courses.index')->with('courses', $courses);
     }
 
     /**
@@ -35,7 +41,11 @@ class CourseController extends Controller
      */
     public function show(string $id)
     {
-        //
+        // displays teachers, assessments (due date)
+        $course = Course::find($id);
+        $teachers = $course->teachers;
+        $assessments = $course->assessments;
+        return view('courses.show')->with('teachers', $teachers)->with('assessments', $assessments);
     }
 
     /**

@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('assessment_student', function (Blueprint $table) {
+        Schema::create('assessment_students', function (Blueprint $table) {
             $table->id();
             $table->integer('grade')->nullable();
             
@@ -31,6 +31,6 @@ return new class extends Migration
     public function down(): void
     {
         Schema::disableForeignKeyConstraints();
-        Schema::dropIfExists('assessment_student');
+        Schema::dropIfExists('assessment_students');
     }
 };

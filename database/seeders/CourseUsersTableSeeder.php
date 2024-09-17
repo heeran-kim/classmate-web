@@ -5,14 +5,14 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
-class CourseUserTableSeeder extends Seeder
+class CourseUsersTableSeeder extends Seeder
 {
     /**
      * Run the database seeds.
      */
     public function run(): void
     {
-        DB::table('course_user')->insert([
+        DB::table('course_users')->insert([
             ['course_id' => 1, 'user_id' => 1],  // Alice가 CS101 수강
             ['course_id' => 1, 'user_id' => 2],  // Bob이 CS101 수강
             ['course_id' => 1, 'user_id' => 3],  // Charlie가 CS101 수강

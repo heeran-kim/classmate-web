@@ -5,14 +5,14 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
-class AssessmentStudentTableSeeder extends Seeder
+class AssessmentStudentsTableSeeder extends Seeder
 {
     /**
      * Run the database seeds.
      */
     public function run(): void
     {
-        DB::table('assessment_student')->insert([
+        DB::table('assessment_students')->insert([
             // Assignment 1 참여 (모두 리뷰 완료)
             ['assessment_id' => 1, 'student_id' => 1, 'grade' => 90],  // Alice가 Assignment 1에서 90점
             ['assessment_id' => 1, 'student_id' => 2, 'grade' => 85],  // Bob이 Assignment 1에서 85점
