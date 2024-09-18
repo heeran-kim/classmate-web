@@ -12,8 +12,4 @@ class Assessment extends Model
     function course() {
         return $this->belongsTo(Course::class);
     }
-
-    function assessmentStudents() {
-        return $this->hasMany(AssessmentStudent::class);
-    }
 }

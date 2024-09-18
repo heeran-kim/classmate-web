@@ -6,7 +6,11 @@
 </ul>
 <ul>
     @foreach ($assessments as $assessment)
-    <a href="{{ route('assessment.show', ['assessment' => $assessment->id]) }}"><li>{{$assessment->title}} {{$assessment->due_date}}</li></a>
+    <a href="{{ route('assessment.show', ['courseId' => $course->id, 'id' => $assessment->id]) }}"><li>{{$assessment->title}} {{$assessment->due_date}}</li></a>
     @endforeach
 </ul>
+
+<a href="{{ route('course.enrollPage', ['id' => $course->id]) }}">Enroll Student</a>
+<a href="{{ route('assessment.create', ['id' => $course->id]) }}">Create Assessment</a>
+
 </x-master>

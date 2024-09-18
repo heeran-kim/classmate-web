@@ -55,18 +55,11 @@ class User extends Authenticatable
             'id',                // Foreign key on the final model (Course) that links to the intermediate table (course_id).
             'id',                // Local key on the current model.
             'course_id'          // Local key on the intermediate model that links to the final model.
-        );
+        )->orderBy('name');
     }
     
-    function courseUsers() {
-        return $this->hasMany(CourseUser::class);
-    }
-
-    function assessmentStudents() {
-        return $this->hasMany(AssessmentStudent::class);
-    }
-
     function reviews() {
         return $this->hasMany(Review::class);
     }
+    
 }

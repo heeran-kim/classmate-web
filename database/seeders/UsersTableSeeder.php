@@ -13,10 +13,10 @@ class UsersTableSeeder extends Seeder
     public function run(): void
     {
         DB::table('users')->insert([
-            ['s_number' => 'S001', 'password' => bcrypt('password'), 'name' => 'Alice', 'email' => 'alice@example.com', 'type' => 'student'],
-            ['s_number' => 'S002', 'password' => bcrypt('password'), 'name' => 'Bob', 'email' => 'bob@example.com', 'type' => 'student'],
-            ['s_number' => 'S003', 'password' => bcrypt('password'), 'name' => 'Charlie', 'email' => 'charlie@example.com', 'type' => 'student'],
-            ['s_number' => 'T001', 'password' => bcrypt('password'), 'name' => 'Professor X', 'email' => 'professorx@example.com', 'type' => 'teacher'],
+            ['snumber' => 'S001', 'password' => bcrypt('password'), 'name' => 'Alice', 'email' => 'alice@example.com', 'type' => 'student'],
+            ['snumber' => 'S002', 'password' => bcrypt('password'), 'name' => 'Bob', 'email' => 'bob@example.com', 'type' => 'student'],
+            ['snumber' => 'S003', 'password' => bcrypt('password'), 'name' => 'Charlie', 'email' => 'charlie@example.com', 'type' => 'student'],
+            ['snumber' => 'T001', 'password' => bcrypt('password'), 'name' => 'Professor X', 'email' => 'professorx@example.com', 'type' => 'teacher'],
         ]);
     }
 }

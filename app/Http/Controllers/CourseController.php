@@ -14,10 +14,7 @@ class CourseController extends Controller
      */
     public function index()
     {
-        $user = User::inRandomOrder()->first();
-        $courses = $user->courses;
-        
-        return view('courses.index')->with('courses', $courses);
+
     }
 
     /**
@@ -42,10 +39,10 @@ class CourseController extends Controller
     public function show(string $id)
     {
         // displays teachers, assessments (due date)
-        $course = Course::find($id);
+        $course = Course::findOrFail($id);
         $teachers = $course->teachers;
         $assessments = $course->assessments;
-        return view('courses.show')->with('teachers', $teachers)->with('assessments', $assessments);
+        return view('courses.show')->with('teachers', $teachers)->with('assessments', $assessments)->with('course', $course);
     }
 
     /**
@@ -71,4 +68,27 @@ class CourseController extends Controller
     {
         //
     }
+
+    public function enrollPage(string $id)
+    {
+        $course = Course::findOrFail($id);
+        $enrolledStudentIds = $course->students->pluck('id');
+        $unenrolledStudents = User::where('type', 'student')
+                                ->whereNotIn('id', $enrolledStudentIds)
+                                ->orderBy('name')
+                                ->get();
+    
+        return view('courses.enroll')->with('students', $unenrolledStudents)->with('course', $course);
+    }
+
+    public function enroll(Request $request)
+    {
+        $courseUser = new CourseUser();
+        $courseUser->course_id = $request->route('id');
+        $courseUser->user_id = $request->student;
+        $courseUser->save();
+
+        return redirect("course/$courseUser->course_id/enroll");
+    }
+
 }
