@@ -14,7 +14,7 @@
     <h3>Peer Review Received</h3>
     <ul>
         @foreach ($reviewsReceived as $review)
-            <a href=""><li>{{$review->rating}} {{$review->text}} {{$review->reviewer->name}} -> {{$review->reviewee->name}}</li></a>
+            <li>{{$review->rating}} {{$review->text}} {{$review->reviewer->name}} -> {{$review->reviewee->name}}</li>
         @endforeach
     </ul>
 
