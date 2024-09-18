@@ -95,7 +95,8 @@ class AssessmentController extends Controller
                 $submitted = $assessment->reviews()->where('student_id', $student->id)->count();
                 $score = AssessmentStudent::where('assessment_id', $assessmentId)
                                             ->where('student_id', $student->id)
-                                            ->pluck('score');
+                                            ->pluck('score')
+                                            ->first();
                 $studentsData[] = ['name'=>$name, 'received'=>$received, 'submitted'=>$submitted, 'score'=>$score];
             }
             return view("assessments.show")

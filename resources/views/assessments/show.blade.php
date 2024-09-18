@@ -39,9 +39,10 @@
 <a href="{{ route('course.assessment.edit', ['course' => $course->id, 'assessment' => $assessment->id]) }}">Edit</a>
 @endif
 
+<ul>
 @foreach ($studentsData as $studentData)
-    <a href=""> {{$studentData->name}} {{$studentData->received}} {{$studentData->submitted}} {{$studentData->score}} </a>
+    <a href=""><li>{{$studentData['name']}} {{$studentData['received']}} {{$studentData['submitted']}} {{$studentData['score']}}</li></a>
 @endforeach
-
+</ul>
 @endif
 </x-master>
