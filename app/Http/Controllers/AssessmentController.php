@@ -20,20 +20,19 @@ class AssessmentController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create(string $courseId)
+    public function create(Request $request)
     {
-        $course = Course::findOrFail($courseId);
-        
-        return view('assessments.create')->with('course', $course);
+        $courseId = $request->input('courseId');
+        return view('assessments.create')->with('courseId', $courseId);
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request, string $courseId)
+    public function store(Request $request)
     {
         $assessment = new Assessment();
-        $assessment->course_id = $courseId;
+        $assessment->course_id = $request->courseId;
         $assessment->title = $request->title;
         $assessment->instruction = $request->instruction;
         $assessment->num_required_reviews = $request->num_required_reviews;
@@ -44,7 +43,7 @@ class AssessmentController extends Controller
         $assessment->save();
         $id = $assessment->id;
         
-        $course = Course::findOrFail($courseId);
+        $course = Course::findOrFail($request->courseId);
         $students = $course->students;
 
         foreach ($students as $student) {
@@ -54,17 +53,16 @@ class AssessmentController extends Controller
             $assessmentStudent->save();
         }
 
-        return redirect("course/$courseId/assessment/$id");
+        return redirect("assessment/$id");
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(string $courseId, string $assessmentId)
+    public function show(string $assessmentId)
     {
-        if (0) {
+        if (1) {
             $assessment = Assessment::findOrFail($assessmentId);
-            $course = Course::findOrFail($courseId);
             
             $reviewer = Assessment::findOrFail($assessmentId)->students->random(1)->first();
             $reviewsSubmitted = $assessment->reviews()->where('student_id', $reviewer->id)->get();
@@ -77,7 +75,6 @@ class AssessmentController extends Controller
             
             return view("assessments.show")
             ->with('assessment', $assessment)
-            ->with('course', $course)
             ->with('reviewsSubmitted', $reviewsSubmitted)
             ->with('reviewsReceived', $reviewsReceived)
             ->with('students', $notReviewedStudents)
@@ -100,6 +97,7 @@ class AssessmentController extends Controller
                 $studentsData[] = ['name'=>$name, 'received'=>$received, 'submitted'=>$submitted, 'score'=>$score];
             }
             return view("assessments.show")
+            ->with('assessment', $assessment)
             ->with('reviewCount', $reviewCount)
             ->with('students', $students)
             ->with('studentsData', $studentsData);
@@ -109,18 +107,17 @@ class AssessmentController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $courseId, string $assessmentId)
+    public function edit(string $assessmentId)
     {
         $assessment = Assessment::findOrFail($assessmentId);
-        $course = Course::findOrFail($courseId);
         
-        return view("assessments.edit")->with('assessment', $assessment)->with('course', $course);
+        return view("assessments.edit")->with('assessment', $assessment);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $courseId, string $assessmentId)
+    public function update(Request $request, string $assessmentId)
     {
         $assessment = Assessment::findOrFail($assessmentId);
 
@@ -133,7 +130,7 @@ class AssessmentController extends Controller
 
         $assessment->save();
         
-        return redirect("course/$courseId/assessment/$assessmentId");
+        return redirect("assessment/$assessmentId");
     }
 
     /**

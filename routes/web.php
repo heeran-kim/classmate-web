@@ -8,8 +8,8 @@ use App\Http\Controllers\ReviewController;
 
 Route::resource('user', UserController::class);
 Route::resource('review', ReviewController::class);
-Route::resource('course.assessment', AssessmentController::class);
-Route::resource('course.assessment.review', ReviewController::class);
+Route::resource('assessment', AssessmentController::class);
+Route::resource('assessment.review', ReviewController::class);
 
 
 Route::get('/', function () {

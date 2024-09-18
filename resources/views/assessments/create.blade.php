@@ -1,6 +1,7 @@
 <x-master>
-<form method="POST" action="{{ route('course.assessment.store', ['course' => $course->id]) }}">
+<form method="POST" action="{{ route('assessment.store') }}">
     @csrf
+    <input type="hidden" name="courseId" value={{$courseId}}>
     <p><label>Title: </label><input type="text" name="title"></p>
     <p><label>Instruction: </label><textarea name="instruction" rows="10"></textarea></p>
     <p><label>The number of reviews required: </label><input type="number" name="num_required_reviews"></p>
