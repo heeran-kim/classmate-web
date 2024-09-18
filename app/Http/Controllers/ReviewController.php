@@ -7,6 +7,7 @@ use App\Models\Assessment;
 use App\Models\Review;
 use App\Models\AssessmentStudent;
 use App\Models\User;
+use Illuminate\Database\Eloquent\MassAssignmentException;
 
 class ReviewController extends Controller
 {
@@ -56,11 +57,16 @@ class ReviewController extends Controller
         $student = User::findOrFail($studentId);
         $reviewsSubmitted = $assessment->reviews()->where('student_id', $studentId)->get();
         $reviewsReceived = $assessment->reviews()->where('reviewee_id', $studentId)->get();
+        $score = AssessmentStudent::where('assessment_id', $assessmentId)
+                            ->where('student_id', $studentId)
+                            ->firstOrFail()
+                            ->score;
         return view("reviews.student")
         ->with('assessment', $assessment)
         ->with('student', $student)
         ->with('reviewsSubmitted', $reviewsSubmitted)
-        ->with('reviewsReceived', $reviewsReceived);
+        ->with('reviewsReceived', $reviewsReceived)
+        ->with('score', $score);
     }
 
     /**

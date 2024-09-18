@@ -137,6 +137,15 @@ class AssessmentController extends Controller
         return redirect("assessment/$assessmentId");
     }
 
+    public function assignScore(Request $request, string $assessmentId, string $studentId){
+        $assessmentStudent = AssessmentStudent::where('assessment_id', $assessmentId)
+                            ->where('student_id', $studentId)
+                            ->firstOrFail();
+        $assessmentStudent->score = $request->score;
+        $assessmentStudent->save();
+        return back();
+    }
+
     /**
      * Remove the specified resource from storage.
      */

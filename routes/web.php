@@ -18,5 +18,5 @@ Route::get('/', function () {
 Route::get('course/{id}/enroll', [CourseController::class, 'enrollPage'])->name('course.enrollPage');
 Route::post('course/{course}/enroll', [CourseController::class, 'enroll'])->name('course.enroll');
 Route::resource('course', CourseController::class);
-
+Route::post('assessment/{assessment}/student/{student}', [AssessmentController::class, 'assignScore'])->name('assessment.assignScore');
 Route::get('assessment/{assessment}/student/{student}/reviews', [ReviewController::class, 'showStudentReviews'])->name('student.reviews');
