@@ -96,9 +96,8 @@ class CourseController extends Controller
             $assessmentStudent = new AssessmentStudent();
             $assessmentStudent->assessment_id = $assessment->id;
             $assessmentStudent->student_id = $request->student;
+            $assessmentStudent->save();
         }
-
-        $assessmentStudent->save();
 
         return redirect("course/$courseId/enroll");
     }

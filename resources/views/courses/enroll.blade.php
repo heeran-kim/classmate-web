@@ -9,4 +9,5 @@
     </select></p>
     <button type="submit">Enroll</button>
 </form>
+<a href="{{ route('course.show', ['course' => $course->id]) }}">Back</button>
 </x-master>

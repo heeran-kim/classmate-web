@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Assessment;
+use App\Models\Review;
+use App\Models\AssessmentStudent;
 
 class ReviewController extends Controller
 {
@@ -20,17 +22,29 @@ class ReviewController extends Controller
      */
     public function create(string $courseId, string $assessmentId)
     {
-        $assessment = Assessment::findOrFail($assessmentId);
-        dd($assessment->students);
-        return view('reviews.create')->with('students', $students);
+
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(Request $request, string $courseId, string $assessmentId)
     {
-        //
+        $review = new Review();
+        $review->text = $request->text;
+        $review->rating = $request->rating;
+        $review->reviewee_id = $request->reviewee;
+        
+        $studentId = Assessment::findOrFail($assessmentId)->students->random(1)->first()->id;
+        $assessmentStudent = AssessmentStudent::where('assessment_id', $assessmentId)
+        ->where('student_id', $studentId)
+        ->firstOrFail();
+        
+        $review->assessment_student_id = $assessmentStudent->id;
+        
+        $review->save();
+
+        return redirect("course/$courseId/assessment/$assessmentId");
     }
 
     /**

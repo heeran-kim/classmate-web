@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Course;
 use App\Models\Assessment;
+use App\Models\AssessmentStudent;
 
 class AssessmentController extends Controller
 {
@@ -50,9 +51,8 @@ class AssessmentController extends Controller
             $assessmentStudent = new AssessmentStudent();
             $assessmentStudent->assessment_id = $id;
             $assessmentStudent->student_id = $student->id;
+            $assessmentStudent->save();
         }
-
-        $assessmentStudent->save();
 
         return redirect("course/$courseId/assessment/$id");
     }
@@ -62,11 +62,47 @@ class AssessmentController extends Controller
      */
     public function show(string $courseId, string $assessmentId)
     {
-        $assessment = Assessment::findOrFail($assessmentId);
-        $course = Course::findOrFail($courseId);
-        $reviews = $assessment->reviews;
-
-        return view("assessments.show")->with('assessment', $assessment)->with('course', $course)->with('reviews', $reviews);
+        if (0) {
+            $assessment = Assessment::findOrFail($assessmentId);
+            $course = Course::findOrFail($courseId);
+            
+            $reviewer = Assessment::findOrFail($assessmentId)->students->random(1)->first();
+            $reviewsSubmitted = $assessment->reviews()->where('student_id', $reviewer->id)->get();
+            $reviewsReceived = $assessment->reviews()->where('reviewee_id', $reviewer->id)->get();
+            $assessmentStudent = AssessmentStudent::where('assessment_id', $assessmentId)
+            ->where('student_id', $reviewer->id)
+            ->firstOrFail();
+            $revieweeIds = $assessmentStudent->reviews->pluck('reviewee_id');
+            $notReviewedStudents = $assessment->students()->whereNotIn('users.id', $revieweeIds)->get();
+            
+            return view("assessments.show")
+            ->with('assessment', $assessment)
+            ->with('course', $course)
+            ->with('reviewsSubmitted', $reviewsSubmitted)
+            ->with('reviewsReceived', $reviewsReceived)
+            ->with('students', $notReviewedStudents)
+            ->with('reviewer', $reviewer);
+        }
+        else {
+            $assessment = Assessment::findOrFail($assessmentId);
+            $reviewCount = $assessment->reviews()->count();
+            $students = $assessment->students;
+            
+            $studentsData = [];
+            foreach ($students as $student) {
+                $name = $student->name;
+                $received = $assessment->reviews()->where('reviewee_id', $student->id)->count();
+                $submitted = $assessment->reviews()->where('student_id', $student->id)->count();
+                $score = AssessmentStudent::where('assessment_id', $assessmentId)
+                                            ->where('student_id', $student->id)
+                                            ->pluck('score');
+                $studentsData[] = ['name'=>$name, 'received'=>$received, 'submitted'=>$submitted, 'score'=>$score];
+            }
+            return view("assessments.show")
+            ->with('reviewCount', $reviewCount)
+            ->with('students', $students)
+            ->with('studentsData', $studentsData);
+        }
     }
 
     /**
