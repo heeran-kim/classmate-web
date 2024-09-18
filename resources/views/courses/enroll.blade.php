@@ -1,5 +1,5 @@
 <x-master>
-<form method="POST" action="{{ route('course.enroll', ['id' => $course->id]) }}">
+<form method="POST" action="{{ route('course.enroll', ['course' => $course->id]) }}">
     @csrf
 
     <p><select name="student">

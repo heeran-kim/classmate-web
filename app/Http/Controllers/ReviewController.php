@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Assessment;
 
 class ReviewController extends Controller
 {
@@ -17,9 +18,11 @@ class ReviewController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create(string $courseId, string $assessmentId)
     {
-        //
+        $assessment = Assessment::findOrFail($assessmentId);
+        dd($assessment->students);
+        return view('reviews.create')->with('students', $students);
     }
 
     /**

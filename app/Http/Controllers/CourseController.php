@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Course;
 use App\Models\User;
 use App\Models\CourseUser;
+use App\Models\AssessmentStudent;
 
 class CourseController extends Controller
 {
@@ -81,14 +82,25 @@ class CourseController extends Controller
         return view('courses.enroll')->with('students', $unenrolledStudents)->with('course', $course);
     }
 
-    public function enroll(Request $request)
+    public function enroll(Request $request, string $courseId)
     {
         $courseUser = new CourseUser();
-        $courseUser->course_id = $request->route('id');
+        $courseUser->course_id = $courseId;
         $courseUser->user_id = $request->student;
         $courseUser->save();
 
-        return redirect("course/$courseUser->course_id/enroll");
+        $course = Course::findOrFail($courseId);
+        $assessments = $course->assessments;
+
+        foreach ($assessments as $assessment) {
+            $assessmentStudent = new AssessmentStudent();
+            $assessmentStudent->assessment_id = $assessment->id;
+            $assessmentStudent->student_id = $request->student;
+        }
+
+        $assessmentStudent->save();
+
+        return redirect("course/$courseId/enroll");
     }
 
 }
