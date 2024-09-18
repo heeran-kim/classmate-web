@@ -24,8 +24,8 @@
         @csrf
         
         <p><label>Reviewee: </label><select name="reviewee">
-            @foreach ($students as $student)
-            <option value="{{$student->id}}">{{$student->snumber}} {{$student->name}}</option>
+            @foreach ($potentialReviewees as $potentialReviewee)
+            <option value="{{$potentialReviewee->id}}">{{$potentialReviewee->snumber}} {{$potentialReviewee->name}}</option>
             @endforeach
         </select></p>
         <p><label>Rating: </label><input type="number" name="rating"></p>

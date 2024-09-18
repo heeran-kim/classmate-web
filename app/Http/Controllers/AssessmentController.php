@@ -68,16 +68,19 @@ class AssessmentController extends Controller
             $reviewsSubmitted = $assessment->reviews()->where('student_id', $reviewer->id)->get();
             $reviewsReceived = $assessment->reviews()->where('reviewee_id', $reviewer->id)->get();
             $assessmentStudent = AssessmentStudent::where('assessment_id', $assessmentId)
-            ->where('student_id', $reviewer->id)
-            ->firstOrFail();
+                                ->where('student_id', $reviewer->id)
+                                ->firstOrFail();
             $revieweeIds = $assessmentStudent->reviews->pluck('reviewee_id');
-            $notReviewedStudents = $assessment->students()->whereNotIn('users.id', $revieweeIds)->get();
+            $potentialReviewees = $assessment->students()
+                                    ->whereNotIn('users.id', $revieweeIds)
+                                    ->where('users.id', '!=', $reviewer->id)
+                                    ->get();
             
             return view("assessments.show")
             ->with('assessment', $assessment)
             ->with('reviewsSubmitted', $reviewsSubmitted)
             ->with('reviewsReceived', $reviewsReceived)
-            ->with('students', $notReviewedStudents)
+            ->with('potentialReviewees', $potentialReviewees)
             ->with('reviewer', $reviewer);
         }
         else {
