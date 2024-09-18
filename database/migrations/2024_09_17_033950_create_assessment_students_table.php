@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('assessment_students', function (Blueprint $table) {
             $table->id();
-            $table->integer('grade')->nullable();
+            $table->integer('score')->nullable();
             
             $table->unsignedBigInteger('assessment_id');
             $table->foreign('assessment_id')->references('id')->on('assessments');
