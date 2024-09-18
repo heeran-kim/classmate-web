@@ -14,4 +14,5 @@
 
     <button type="submit">Create</button>
 </form>
+<a href="{{ route('course.show', ['course' => $courseId]) }}">Back</button>
 </x-master>

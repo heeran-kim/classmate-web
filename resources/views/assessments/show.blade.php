@@ -1,6 +1,5 @@
 <x-master>
-@if (1)
-
+@if (0)
     <h2>{{$reviewer->name}}</h2>
     <p>{{$assessment->title}}</p>
     <p>{{$assessment->instruction}}</p>
@@ -45,4 +44,5 @@
 @endforeach
 </ul>
 @endif
+<a href="{{ route('course.show', ['course' => $assessment->course->id]) }}">Back</button>
 </x-master>

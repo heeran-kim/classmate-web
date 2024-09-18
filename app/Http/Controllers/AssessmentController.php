@@ -61,7 +61,7 @@ class AssessmentController extends Controller
      */
     public function show(string $assessmentId)
     {
-        if (1) {
+        if (0) {
             $assessment = Assessment::findOrFail($assessmentId);
             
             $reviewer = Assessment::findOrFail($assessmentId)->students->random(1)->first();
