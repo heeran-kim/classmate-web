@@ -55,7 +55,7 @@ class User extends Authenticatable
             'id',                // Foreign key on the final model (Course) that links to the intermediate table (course_id).
             'id',                // Local key on the current model.
             'course_id'          // Local key on the intermediate model that links to the final model.
-        )->orderBy('name');
+        )->orderBy('code');
     }
     
     function reviews() {
