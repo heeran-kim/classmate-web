@@ -90,6 +90,7 @@ class AssessmentController extends Controller
             
             $studentsData = [];
             foreach ($students as $student) {
+                $id = $student->id;
                 $name = $student->name;
                 $received = $assessment->reviews()->where('reviewee_id', $student->id)->count();
                 $submitted = $assessment->reviews()->where('student_id', $student->id)->count();
@@ -97,7 +98,7 @@ class AssessmentController extends Controller
                                             ->where('student_id', $student->id)
                                             ->pluck('score')
                                             ->first();
-                $studentsData[] = ['name'=>$name, 'received'=>$received, 'submitted'=>$submitted, 'score'=>$score];
+                $studentsData[] = ['id'=>$id, 'name'=>$name, 'received'=>$received, 'submitted'=>$submitted, 'score'=>$score];
             }
             return view("assessments.show")
             ->with('assessment', $assessment)

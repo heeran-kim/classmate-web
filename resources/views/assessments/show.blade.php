@@ -40,7 +40,9 @@
 
 <ul>
 @foreach ($studentsData as $studentData)
-    <a href=""><li>{{$studentData['name']}} {{$studentData['received']}} {{$studentData['submitted']}} {{$studentData['score']}}</li></a>
+    <a href="{{ route('student.reviews', ['assessment' => $assessment->id, 'student' => $studentData['id']])}}">
+        <li>{{$studentData['name']}} {{$studentData['submitted']}} {{$studentData['received']}} {{$studentData['score']}}</li>
+    </a>
 @endforeach
 </ul>
 @endif

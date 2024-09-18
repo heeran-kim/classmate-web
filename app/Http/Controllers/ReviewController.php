@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Assessment;
 use App\Models\Review;
 use App\Models\AssessmentStudent;
+use App\Models\User;
 
 class ReviewController extends Controller
 {
@@ -28,7 +29,7 @@ class ReviewController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request, string $courseId, string $assessmentId)
+    public function store(Request $request, string $assessmentId)
     {
         $review = new Review();
         $review->text = $request->text;
@@ -44,7 +45,22 @@ class ReviewController extends Controller
         
         $review->save();
 
-        return redirect("course/$courseId/assessment/$assessmentId");
+        return redirect("assessment/$assessmentId");
+    }
+
+    /**
+     * Display the specified resource.
+     */
+    public function showStudentReviews(string $assessmentId, string $studentId){
+        $assessment = Assessment::findOrFail($assessmentId);
+        $student = User::findOrFail($studentId);
+        $reviewsSubmitted = $assessment->reviews()->where('student_id', $studentId)->get();
+        $reviewsReceived = $assessment->reviews()->where('reviewee_id', $studentId)->get();
+        return view("reviews.student")
+        ->with('assessment', $assessment)
+        ->with('student', $student)
+        ->with('reviewsSubmitted', $reviewsSubmitted)
+        ->with('reviewsReceived', $reviewsReceived);
     }
 
     /**
