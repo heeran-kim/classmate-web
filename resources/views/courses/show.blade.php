@@ -11,7 +11,7 @@
 </ul>
 
 @if (Auth::user()->type == 'teacher')
-    <a href="{{ route('course.enrollPage', ['id' => $course->id]) }}">Enroll Student</a>
+    <a href="{{ route('course.enrollPage', ['course' => $course->id]) }}">Enroll Student</a>
     <a href="{{ route('assessment.create', ['courseId' => $course->id]) }}">Create Assessment</a>
 @endif
 </x-master>

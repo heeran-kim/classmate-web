@@ -16,26 +16,24 @@ class CourseController extends Controller
      */
     public function index()
     {
-        $user = Auth::user();
-        $courses = $user->courses;
+        $courses = Auth::user()->courses;
         return view('courses.index')->with('courses', $courses);
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(Course $course)
     {
-        $course = Course::findOrFail($id);
+        // TODO: $teachers, $assessments 필요?
         $teachers = $course->teachers;
         $assessments = $course->assessments;
         return view('courses.show')->with('teachers', $teachers)->with('assessments', $assessments)->with('course', $course);
     }
 
     // teachr만 접근
-    public function enrollPage(string $id)
+    public function enrollPage(Course $course)
     {
-        $course = Course::findOrFail($id);
         $enrolledStudentIds = $course->students->pluck('id');
         $unenrolledStudents = User::where('type', 'student')
                                 ->whereNotIn('id', $enrolledStudentIds)
@@ -46,18 +44,17 @@ class CourseController extends Controller
     }
 
     // teachr만 접근
-    public function enroll(Request $request, string $courseId)
+    public function enroll(Request $request, Course $course)
     {
         $request->validate($request, [
             'student' => 'exists:users,id'
         ]);
 
         $courseUser = new CourseUser();
-        $courseUser->course_id = $courseId;
+        $courseUser->course_id = $course->id;
         $courseUser->user_id = $request->student;
         $courseUser->save();
 
-        $course = Course::findOrFail($courseId);
         $assessments = $course->assessments;
 
         foreach ($assessments as $assessment) {
@@ -67,7 +64,6 @@ class CourseController extends Controller
             $assessmentStudent->save();
         }
 
-        return redirect("course/$courseId/enroll");
+        return redirect("course/$course->id/enroll");
     }
-
 }
