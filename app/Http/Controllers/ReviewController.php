@@ -13,7 +13,8 @@ class ReviewController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request, string $assessmentId)
+    // 학생만 접근
+    public function store(Request $request, Assessment $assessment)
     {
         $request->validate($request, [
             'text' => 'required|regex:/^\s*\S+(?:\s+\S+){4,}\s*$/',
@@ -24,8 +25,8 @@ class ReviewController extends Controller
         $review->text = $request->text;
         $review->reviewee_id = $request->reviewee;
         
-        $studentId = Assessment::findOrFail($assessmentId)->students->random(1)->first()->id;
-        $assessmentStudent = AssessmentStudent::where('assessment_id', $assessmentId)
+        $studentId = $assessment->students->random(1)->first()->id;
+        $assessmentStudent = AssessmentStudent::where('assessment_id', $assessment->id)
                             ->where('student_id', $studentId)
                             ->firstOrFail();
         
@@ -33,19 +34,18 @@ class ReviewController extends Controller
         
         $review->save();
 
-        return redirect("assessment/$assessmentId");
+        return redirect("assessment/$assessment->id");
     }
 
     /**
      * Display the specified resource.
      */
-    public function showStudentReviews(string $assessmentId, string $studentId){
-        $assessment = Assessment::findOrFail($assessmentId);
-        $student = User::findOrFail($studentId);
-        $reviewsSubmitted = $assessment->reviews()->where('student_id', $studentId)->get();
-        $reviewsReceived = $assessment->reviews()->where('reviewee_id', $studentId)->get();
-        $score = AssessmentStudent::where('assessment_id', $assessmentId)
-                            ->where('student_id', $studentId)
+    // teacher만 접근
+    public function showStudentReviews(Assessment $assessment, User $student){
+        $reviewsSubmitted = $assessment->reviews()->where('student_id', $student->id)->get();
+        $reviewsReceived = $assessment->reviews()->where('reviewee_id', $student->id)->get();
+        $score = AssessmentStudent::where('assessment_id', $assessment->id)
+                            ->where('student_id', $student->id)
                             ->firstOrFail()
                             ->score;
         return view("reviews.student")
