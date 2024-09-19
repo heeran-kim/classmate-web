@@ -15,7 +15,6 @@ class ReviewController extends Controller
      */
     public function store(Request $request, string $assessmentId)
     {
-        // todo: rating 은 reviewee가 하도록
         $request->validate($request, [
             'text' => 'required|regex:/^\s*\S+(?:\s+\S+){4,}\s*$/',
             'reviewee' => 'exists:users,id'

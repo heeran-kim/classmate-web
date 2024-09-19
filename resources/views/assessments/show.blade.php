@@ -37,7 +37,6 @@
             <option value="{{$potentialReviewee->id}}" {{old('reviewee') == $potentialReviewee->id ? 'selected' : ''}}>{{$potentialReviewee->snumber}} {{$potentialReviewee->name}}</option>
             @endforeach
         </select></p>
-        <p><label>Rating: </label><input type="number" name="rating" value="{{old('rating')}}"></p>
         <p><label>Review: </label><input type="text" name="text" value="{{old('text')}}"></p>
         <button type="submit">Submit</button>
     </form>
