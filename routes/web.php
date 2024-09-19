@@ -1,22 +1,20 @@
 <?php
 
+use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\UserController;
-use App\Http\Controllers\CourseController;
-use App\Http\Controllers\AssessmentController;
-use App\Http\Controllers\ReviewController;
-
-Route::resource('user', UserController::class);
-Route::resource('assessment', AssessmentController::class);
-Route::resource('assessment.review', ReviewController::class);
-
 
 Route::get('/', function () {
-    return view('users.login');
+    return view('welcome');
 });
 
-Route::get('course/{id}/enroll', [CourseController::class, 'enrollPage'])->name('course.enrollPage');
-Route::post('course/{course}/enroll', [CourseController::class, 'enroll'])->name('course.enroll');
-Route::resource('course', CourseController::class);
-Route::post('assessment/{assessment}/student/{student}', [AssessmentController::class, 'assignScore'])->name('assessment.assignScore');
-Route::get('assessment/{assessment}/student/{student}/reviews', [ReviewController::class, 'showStudentReviews'])->name('student.reviews');
+Route::get('/dashboard', function () {
+    return view('dashboard');
+})->middleware(['auth', 'verified'])->name('dashboard');
+
+Route::middleware('auth')->group(function () {
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+});
+
+require __DIR__.'/auth.php';
