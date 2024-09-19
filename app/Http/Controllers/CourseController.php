@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use App\Models\Course;
 use App\Models\User;
+use App\Models\Course;
 use App\Models\CourseUser;
+use Illuminate\Http\Request;
 use App\Models\AssessmentStudent;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Foundation\Validation\ValidatesRequests; 
 
 class CourseController extends Controller
@@ -17,7 +18,10 @@ class CourseController extends Controller
      */
     public function index()
     {
+        $user = Auth::user();
+        $courses = $user->courses;
 
+        return view('courses.index')->with('courses', $courses);
     }
 
     /**

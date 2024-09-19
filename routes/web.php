@@ -10,11 +10,10 @@ use App\Http\Controllers\ReviewController;
 require __DIR__.'/auth.php';
 
 
-Route::resource('user', UserController::class);
 Route::resource('assessment', AssessmentController::class);
 Route::resource('assessment.review', ReviewController::class);
 
-Route::get('/', [UserController::class, 'show'])->middleware(['auth', 'verified'])->name('dashboard');
+Route::get('/', [CourseController::class, 'index'])->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::get('course/{id}/enroll', [CourseController::class, 'enrollPage'])->name('course.enrollPage');
 Route::post('course/{course}/enroll', [CourseController::class, 'enroll'])->name('course.enroll');
