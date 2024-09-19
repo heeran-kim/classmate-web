@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Foundation\Validation\ValidatesRequests; 
+use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
 {
@@ -53,9 +54,9 @@ class UserController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show()
     {
-        $user = User::findOrFail($id);
+        $user = Auth::user();
         $courses = $user->courses;
 
         return view('users.show')->with('courses', $courses)->with('user', $user);

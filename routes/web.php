@@ -7,6 +7,9 @@ use App\Http\Controllers\CourseController;
 use App\Http\Controllers\AssessmentController;
 use App\Http\Controllers\ReviewController;
 
+require __DIR__.'/auth.php';
+
+
 Route::resource('user', UserController::class);
 Route::resource('assessment', AssessmentController::class);
 Route::resource('assessment.review', ReviewController::class);
@@ -25,4 +28,3 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-require __DIR__.'/auth.php';

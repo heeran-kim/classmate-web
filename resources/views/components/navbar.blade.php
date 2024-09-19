@@ -1,6 +1,6 @@
 @auth
     {{Auth::user()->name}}
-    <form method="POST" action "{{url('/logout')}}">
+    <form method="POST" action="{{route('logout')}}">
         @csrf
         <input type="submit" value="Logout">
     </form>
