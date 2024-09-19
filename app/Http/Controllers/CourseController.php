@@ -87,7 +87,7 @@ class CourseController extends Controller
     public function enroll(Request $request, string $courseId)
     {
         $this->validate($request, [
-            'student' => 'exists:course_users,user_id'
+            'student' => 'exists:users,id'
         ]);
 
         $courseUser = new CourseUser();

@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Course;
 use App\Models\Assessment;
 use App\Models\AssessmentStudent;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Foundation\Validation\ValidatesRequests; 
 
 class AssessmentController extends Controller
@@ -76,10 +77,10 @@ class AssessmentController extends Controller
      */
     public function show(string $assessmentId)
     {
-        if (1) {
+        if (Auth::user()->type == 'student') {
             $assessment = Assessment::findOrFail($assessmentId);
             
-            $reviewer = Assessment::findOrFail($assessmentId)->students->random(1)->first();
+            $reviewer = Auth::user();
             $reviewsSubmitted = $assessment->reviews()->where('student_id', $reviewer->id)->get();
             $reviewsReceived = $assessment->reviews()->where('reviewee_id', $reviewer->id)->get();
             $assessmentStudent = AssessmentStudent::where('assessment_id', $assessmentId)
@@ -95,8 +96,7 @@ class AssessmentController extends Controller
             ->with('assessment', $assessment)
             ->with('reviewsSubmitted', $reviewsSubmitted)
             ->with('reviewsReceived', $reviewsReceived)
-            ->with('potentialReviewees', $potentialReviewees)
-            ->with('reviewer', $reviewer);
+            ->with('potentialReviewees', $potentialReviewees);
         }
         else {
             $assessment = Assessment::findOrFail($assessmentId);

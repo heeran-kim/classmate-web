@@ -1,6 +1,5 @@
 <x-master>
-@if (1)
-    <h2>{{$reviewer->name}}</h2>
+@if (Auth::user()->type == 'student')
     <p>{{$assessment->title}}</p>
     <p>{{$assessment->instruction}}</p>
     <p>{{$assessment->num_required_reviews}}</p>

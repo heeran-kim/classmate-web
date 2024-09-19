@@ -1,7 +1,7 @@
 <x-master>
 <ul>
     @foreach ($teachers as $teacher)
-    <a href="{{ route('user.show', ['user' => $teacher->id]) }}"><li>{{$teacher->name}} {{$teacher->s_number}} {{$teacher->email}}</li></a>
+    <li>{{$teacher->name}} {{$teacher->s_number}} {{$teacher->email}}</li>
     @endforeach
 </ul>
 <ul>
