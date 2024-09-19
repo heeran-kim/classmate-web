@@ -11,16 +11,9 @@ use App\Models\AssessmentStudent;
 class AssessmentController extends Controller
 {
     /**
-     * Display a listing of the resource.
-     */
-    public function index()
-    {
-        //
-    }
-
-    /**
      * Show the form for creating a new resource.
      */
+    // teacher만 접근
     public function create(Request $request)
     {
         $courseId = $request->input('courseId');
@@ -30,6 +23,7 @@ class AssessmentController extends Controller
     /**
      * Store a newly created resource in storage.
      */
+    // teacher만 접근
     public function store(Request $request)
     {
         $request->validate($request, [
@@ -40,7 +34,6 @@ class AssessmentController extends Controller
             'type' => 'required|in:student-select,teacher-assign',
             'courseId' => 'exists:courses,id'
         ]);
-        
 
         $assessment = new Assessment();
         $assessment->course_id = $request->courseId;
@@ -50,19 +43,14 @@ class AssessmentController extends Controller
         $assessment->max_score = $request->max_score;
         $assessment->due_date = $request->due_date;
         $assessment->type = $request->type;
-
-
         $assessment->save();
         $id = $assessment->id;
         
-        $course = Course::findOrFail($request->courseId);
-        $students = $course->students;
-
+        $students = Course::findOrFail($request->courseId)->students;
         foreach ($students as $student) {
             $assessmentStudent = new AssessmentStudent();
             $assessmentStudent->assessment_id = $id;
             $assessmentStudent->student_id = $student->id;
-
             $assessmentStudent->save();
         }
 
@@ -123,16 +111,17 @@ class AssessmentController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
+    // teacher만 접근
     public function edit(string $assessmentId)
     {
         $assessment = Assessment::findOrFail($assessmentId);
-        
         return view("assessments.edit")->with('assessment', $assessment);
     }
 
     /**
      * Update the specified resource in storage.
      */
+    // teacher만 접근
     public function update(Request $request, string $assessmentId)
     {
         $request->validate($request, [
@@ -144,39 +133,29 @@ class AssessmentController extends Controller
         ]);
 
         $assessment = Assessment::findOrFail($assessmentId);
-
         $assessment->title = $request->title;
         $assessment->instruction = $request->instruction;
         $assessment->num_required_reviews = $request->num_required_reviews;
         $assessment->max_score = $request->max_score;
         $assessment->due_date = $request->due_date;
         $assessment->type = $request->type;
-
         $assessment->save();
         
         return redirect("assessment/$assessmentId");
     }
 
+    // teacher만 접근
     public function assignScore(Request $request, string $assessmentId, string $studentId)
     {
         $maxScore = Assessment::findOrFail($assessmentId)->max_score;
         $request->validate($request, [
             'score' => 'required|max:'.$maxScore
         ]);
-
         $assessmentStudent = AssessmentStudent::where('assessment_id', $assessmentId)
                             ->where('student_id', $studentId)
                             ->firstOrFail();
         $assessmentStudent->score = $request->score;
         $assessmentStudent->save();
         return back();
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
     }
 }

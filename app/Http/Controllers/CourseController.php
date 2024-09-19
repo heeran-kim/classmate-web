@@ -18,24 +18,7 @@ class CourseController extends Controller
     {
         $user = Auth::user();
         $courses = $user->courses;
-
         return view('courses.index')->with('courses', $courses);
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
     }
 
     /**
@@ -48,30 +31,6 @@ class CourseController extends Controller
         $teachers = $course->teachers;
         $assessments = $course->assessments;
         return view('courses.show')->with('teachers', $teachers)->with('assessments', $assessments)->with('course', $course);
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
     }
 
     public function enrollPage(string $id)
