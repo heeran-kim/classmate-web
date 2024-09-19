@@ -26,13 +26,13 @@ class CourseController extends Controller
      */
     public function show(string $id)
     {
-        // displays teachers, assessments (due date)
         $course = Course::findOrFail($id);
         $teachers = $course->teachers;
         $assessments = $course->assessments;
         return view('courses.show')->with('teachers', $teachers)->with('assessments', $assessments)->with('course', $course);
     }
 
+    // teachr만 접근
     public function enrollPage(string $id)
     {
         $course = Course::findOrFail($id);
@@ -45,6 +45,7 @@ class CourseController extends Controller
         return view('courses.enroll')->with('students', $unenrolledStudents)->with('course', $course);
     }
 
+    // teachr만 접근
     public function enroll(Request $request, string $courseId)
     {
         $request->validate($request, [

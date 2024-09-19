@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
+use App\Models\User;
 use App\Models\Course;
 use App\Models\Assessment;
+use Illuminate\Http\Request;
 use App\Models\AssessmentStudent;
+use Illuminate\Support\Facades\Auth;
 
 class AssessmentController extends Controller
 {
@@ -46,7 +47,7 @@ class AssessmentController extends Controller
         $assessment->save();
         $id = $assessment->id;
         
-        $students = Course::findOrFail($request->courseId)->students;
+        $students = Course::FindOrFail($request->courseId)->students;
         foreach ($students as $student) {
             $assessmentStudent = new AssessmentStudent();
             $assessmentStudent->assessment_id = $id;
@@ -60,15 +61,13 @@ class AssessmentController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $assessmentId)
+    public function show(Assessment $assessment)
     {
         if (Auth::user()->type == 'student') {
-            $assessment = Assessment::findOrFail($assessmentId);
-            
             $reviewer = Auth::user();
             $reviewsSubmitted = $assessment->reviews()->where('student_id', $reviewer->id)->get();
             $reviewsReceived = $assessment->reviews()->where('reviewee_id', $reviewer->id)->get();
-            $assessmentStudent = AssessmentStudent::where('assessment_id', $assessmentId)
+            $assessmentStudent = AssessmentStudent::where('assessment_id', $assessment->id)
                                 ->where('student_id', $reviewer->id)
                                 ->firstOrFail();
             $revieweeIds = $assessmentStudent->reviews->pluck('reviewee_id');
@@ -84,7 +83,6 @@ class AssessmentController extends Controller
             ->with('potentialReviewees', $potentialReviewees);
         }
         else {
-            $assessment = Assessment::findOrFail($assessmentId);
             $reviewCount = $assessment->reviews()->count();
             $students = $assessment->students;
             
@@ -94,7 +92,7 @@ class AssessmentController extends Controller
                 $name = $student->name;
                 $received = $assessment->reviews()->where('reviewee_id', $student->id)->count();
                 $submitted = $assessment->reviews()->where('student_id', $student->id)->count();
-                $score = AssessmentStudent::where('assessment_id', $assessmentId)
+                $score = AssessmentStudent::where('assessment_id', $assessment->id)
                                             ->where('student_id', $student->id)
                                             ->pluck('score')
                                             ->first();
@@ -112,9 +110,8 @@ class AssessmentController extends Controller
      * Show the form for editing the specified resource.
      */
     // teacher만 접근
-    public function edit(string $assessmentId)
+    public function edit(Assessment $assessment)
     {
-        $assessment = Assessment::findOrFail($assessmentId);
         return view("assessments.edit")->with('assessment', $assessment);
     }
 
@@ -122,7 +119,7 @@ class AssessmentController extends Controller
      * Update the specified resource in storage.
      */
     // teacher만 접근
-    public function update(Request $request, string $assessmentId)
+    public function update(Request $request, Assessment $assessment)
     {
         $request->validate($request, [
             'title' => 'required|max:20',
@@ -132,7 +129,6 @@ class AssessmentController extends Controller
             'type' => 'required|in:student-select,teacher-assign'
         ]);
 
-        $assessment = Assessment::findOrFail($assessmentId);
         $assessment->title = $request->title;
         $assessment->instruction = $request->instruction;
         $assessment->num_required_reviews = $request->num_required_reviews;
@@ -141,18 +137,17 @@ class AssessmentController extends Controller
         $assessment->type = $request->type;
         $assessment->save();
         
-        return redirect("assessment/$assessmentId");
+        return redirect("assessment/$assessment->id");
     }
 
     // teacher만 접근
-    public function assignScore(Request $request, string $assessmentId, string $studentId)
+    public function assignScore(Request $request, Assessment $assessment, User $student)
     {
-        $maxScore = Assessment::findOrFail($assessmentId)->max_score;
         $request->validate($request, [
-            'score' => 'required|max:'.$maxScore
+            'score' => 'required|max:'.$assessment->maxScore
         ]);
-        $assessmentStudent = AssessmentStudent::where('assessment_id', $assessmentId)
-                            ->where('student_id', $studentId)
+        $assessmentStudent = AssessmentStudent::where('assessment_id', $assessment->id)
+                            ->where('student_id', $student->id)
                             ->firstOrFail();
         $assessmentStudent->score = $request->score;
         $assessmentStudent->save();

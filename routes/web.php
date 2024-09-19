@@ -9,8 +9,8 @@ use App\Http\Controllers\ReviewController;
 require __DIR__.'/auth.php';
 
 Route::resource('course', CourseController::class)->only(['index', 'show']);
-Route::resource('assessment', AssessmentController::class)->except(['index', 'destroy']);;
-Route::resource('assessment.review', ReviewController::class);
+Route::resource('assessment', AssessmentController::class)->except(['index', 'destroy']);
+Route::resource('assessment.review', ReviewController::class)->only(['store']);
 
 Route::get('/', [CourseController::class, 'index'])->middleware(['auth', 'verified'])->name('dashboard');
 
