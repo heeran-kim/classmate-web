@@ -13,10 +13,9 @@ class ReviewController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    // 학생만 접근
     public function store(Request $request, Assessment $assessment)
     {
-        $request->validate($request, [
+        $request->validate([
             'text' => 'required|regex:/^\s*\S+(?:\s+\S+){4,}\s*$/',
             'reviewee' => 'exists:users,id'
         ]);
@@ -40,7 +39,6 @@ class ReviewController extends Controller
     /**
      * Display the specified resource.
      */
-    // teacher만 접근
     public function showStudentReviews(Assessment $assessment, User $student){
         $reviewsSubmitted = $assessment->reviews()->where('student_id', $student->id)->get();
         $reviewsReceived = $assessment->reviews()->where('reviewee_id', $student->id)->get();

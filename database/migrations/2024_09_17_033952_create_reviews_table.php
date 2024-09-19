@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('reviews', function (Blueprint $table) {
             $table->id();
             $table->text('text');
-            $table->integer('rating');
+            $table->integer('rating')->nullable();
 
             $table->unsignedBigInteger('reviewee_id');
             $table->foreign('reviewee_id')->references('id')->on('users');

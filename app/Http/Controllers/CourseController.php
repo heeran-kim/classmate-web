@@ -31,7 +31,6 @@ class CourseController extends Controller
         return view('courses.show')->with('teachers', $teachers)->with('assessments', $assessments)->with('course', $course);
     }
 
-    // teachr만 접근
     public function enrollPage(Course $course)
     {
         $enrolledStudentIds = $course->students->pluck('id');
@@ -43,10 +42,9 @@ class CourseController extends Controller
         return view('courses.enroll')->with('students', $unenrolledStudents)->with('course', $course);
     }
 
-    // teachr만 접근
     public function enroll(Request $request, Course $course)
     {
-        $request->validate($request, [
+        $request->validate([
             'student' => 'exists:users,id'
         ]);
 

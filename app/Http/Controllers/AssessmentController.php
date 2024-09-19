@@ -14,7 +14,6 @@ class AssessmentController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    // teacher만 접근
     public function create(Request $request)
     {
         $courseId = $request->input('courseId');
@@ -24,10 +23,9 @@ class AssessmentController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    // teacher만 접근
     public function store(Request $request)
     {
-        $request->validate($request, [
+        $request->validate([
             'title' => 'required|max:20',
             'num_required_reviews' => 'required|integer|min:1',
             'max_score' => 'required|integer|min:1|max:100',
@@ -61,6 +59,7 @@ class AssessmentController extends Controller
     /**
      * Display the specified resource.
      */
+    // Auth 로 접근
     public function show(Assessment $assessment)
     {
         if (Auth::user()->type == 'student') {
@@ -109,7 +108,6 @@ class AssessmentController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    // teacher만 접근
     public function edit(Assessment $assessment)
     {
         return view("assessments.edit")->with('assessment', $assessment);
@@ -118,10 +116,9 @@ class AssessmentController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    // teacher만 접근
     public function update(Request $request, Assessment $assessment)
     {
-        $request->validate($request, [
+        $request->validate([
             'title' => 'required|max:20',
             'num_required_reviews' => 'required|integer|min:1',
             'max_score' => 'required|integer|min:1|max:100',
@@ -140,11 +137,10 @@ class AssessmentController extends Controller
         return redirect("assessment/$assessment->id");
     }
 
-    // teacher만 접근
     public function assignScore(Request $request, Assessment $assessment, User $student)
     {
-        $request->validate($request, [
-            'score' => 'required|max:'.$assessment->maxScore
+        $request->validate([
+            'score' => 'required|integer|max:'.$assessment->max_score
         ]);
         $assessmentStudent = AssessmentStudent::where('assessment_id', $assessment->id)
                             ->where('student_id', $student->id)
