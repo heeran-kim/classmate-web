@@ -4,9 +4,12 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\User;
+use Illuminate\Foundation\Validation\ValidatesRequests; 
 
 class UserController extends Controller
 {
+    use ValidatesRequests;  // 트레이트 추가
+
     /**
      * Display a listing of the resource.
      */
@@ -28,6 +31,13 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
+        $this->validate($request, [
+            'name' => 'required|max:50',
+            'email' => 'required|email|max:200|unique:users',
+            'snumber' => 'required|unique:users|regex:/^S\d{4}$/',
+            'password' => 'required|min:8|confirmed'
+        ]);
+        // todo add password confirm 
         $user = new User();
         $user->name = $request->name;
         $user->email = $request->email;

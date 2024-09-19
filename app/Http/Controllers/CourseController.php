@@ -7,9 +7,11 @@ use App\Models\Course;
 use App\Models\User;
 use App\Models\CourseUser;
 use App\Models\AssessmentStudent;
+use Illuminate\Foundation\Validation\ValidatesRequests; 
 
 class CourseController extends Controller
 {
+    use ValidatesRequests;  // 트레이트 추가
     /**
      * Display a listing of the resource.
      */
@@ -84,6 +86,10 @@ class CourseController extends Controller
 
     public function enroll(Request $request, string $courseId)
     {
+        $this->validate($request, [
+            'student' => 'exists:course_users,user_id'
+        ]);
+
         $courseUser = new CourseUser();
         $courseUser->course_id = $courseId;
         $courseUser->user_id = $request->student;

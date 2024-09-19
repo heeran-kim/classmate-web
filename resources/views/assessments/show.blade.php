@@ -1,5 +1,5 @@
 <x-master>
-@if (0)
+@if (1)
     <h2>{{$reviewer->name}}</h2>
     <p>{{$assessment->title}}</p>
     <p>{{$assessment->instruction}}</p>
@@ -19,16 +19,27 @@
     </ul>
 
     <h3>Write Peer Review</h3>
+
+    @if (count($errors) > 0)
+    <div class="alert">
+        <ul>
+            @foreach ($errors->all() as $error)
+            <li>{{$error}}</li>
+            @endforeach
+        </ul>
+    </div>
+    @endif
+
     <form method="POST" action="{{ route('assessment.review.store', ['assessment' => $assessment->id]) }}">
         @csrf
         
         <p><label>Reviewee: </label><select name="reviewee">
             @foreach ($potentialReviewees as $potentialReviewee)
-            <option value="{{$potentialReviewee->id}}">{{$potentialReviewee->snumber}} {{$potentialReviewee->name}}</option>
+            <option value="{{$potentialReviewee->id}}" {{old('reviewee') == $potentialReviewee->id ? 'selected' : ''}}>{{$potentialReviewee->snumber}} {{$potentialReviewee->name}}</option>
             @endforeach
         </select></p>
-        <p><label>Rating: </label><input type="number" name="rating"></p>
-        <p><label>Review: </label><input type="text" name="text"></p>
+        <p><label>Rating: </label><input type="number" name="rating" value="{{old('rating')}}"></p>
+        <p><label>Review: </label><input type="text" name="text" value="{{old('text')}}"></p>
         <button type="submit">Submit</button>
     </form>
 

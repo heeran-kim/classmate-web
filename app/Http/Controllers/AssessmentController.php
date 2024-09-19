@@ -6,9 +6,12 @@ use Illuminate\Http\Request;
 use App\Models\Course;
 use App\Models\Assessment;
 use App\Models\AssessmentStudent;
+use Illuminate\Foundation\Validation\ValidatesRequests; 
 
 class AssessmentController extends Controller
 {
+    use ValidatesRequests;  // 트레이트 추가
+    
     /**
      * Display a listing of the resource.
      */
@@ -31,6 +34,16 @@ class AssessmentController extends Controller
      */
     public function store(Request $request)
     {
+        $this->validate($request, [
+            'title' => 'required|max:20',
+            'num_required_reviews' => 'required|integer|min:1',
+            'max_score' => 'required|integer|min:1|max:100',
+            'due_date' => 'required',
+            'type' => 'required|in:student-select,teacher-assign',
+            'courseId' => 'exists:courses,id'
+        ]);
+        
+
         $assessment = new Assessment();
         $assessment->course_id = $request->courseId;
         $assessment->title = $request->title;
@@ -39,6 +52,7 @@ class AssessmentController extends Controller
         $assessment->max_score = $request->max_score;
         $assessment->due_date = $request->due_date;
         $assessment->type = $request->type;
+
 
         $assessment->save();
         $id = $assessment->id;
@@ -50,6 +64,7 @@ class AssessmentController extends Controller
             $assessmentStudent = new AssessmentStudent();
             $assessmentStudent->assessment_id = $id;
             $assessmentStudent->student_id = $student->id;
+
             $assessmentStudent->save();
         }
 
@@ -61,7 +76,7 @@ class AssessmentController extends Controller
      */
     public function show(string $assessmentId)
     {
-        if (0) {
+        if (1) {
             $assessment = Assessment::findOrFail($assessmentId);
             
             $reviewer = Assessment::findOrFail($assessmentId)->students->random(1)->first();
@@ -123,6 +138,14 @@ class AssessmentController extends Controller
      */
     public function update(Request $request, string $assessmentId)
     {
+        $this->validate($request, [
+            'title' => 'required|max:20',
+            'num_required_reviews' => 'required|integer|min:1',
+            'max_score' => 'required|integer|min:1|max:100',
+            'due_date' => 'required',
+            'type' => 'required|in:student-select,teacher-assign'
+        ]);
+
         $assessment = Assessment::findOrFail($assessmentId);
 
         $assessment->title = $request->title;
@@ -137,7 +160,13 @@ class AssessmentController extends Controller
         return redirect("assessment/$assessmentId");
     }
 
-    public function assignScore(Request $request, string $assessmentId, string $studentId){
+    public function assignScore(Request $request, string $assessmentId, string $studentId)
+    {
+        $maxScore = Assessment::findOrFail($assessmentId)->max_score;
+        $this->validate($request, [
+            'score' => 'required|max:'.$maxScore
+        ]);
+
         $assessmentStudent = AssessmentStudent::where('assessment_id', $assessmentId)
                             ->where('student_id', $studentId)
                             ->firstOrFail();

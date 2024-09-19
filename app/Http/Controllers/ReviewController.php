@@ -8,9 +8,11 @@ use App\Models\Review;
 use App\Models\AssessmentStudent;
 use App\Models\User;
 use Illuminate\Database\Eloquent\MassAssignmentException;
+use Illuminate\Foundation\Validation\ValidatesRequests; 
 
 class ReviewController extends Controller
 {
+    use ValidatesRequests;  // 트레이트 추가
     /**
      * Display a listing of the resource.
      */
@@ -32,15 +34,20 @@ class ReviewController extends Controller
      */
     public function store(Request $request, string $assessmentId)
     {
+        // todo: rating 은 reviewee가 하도록
+        $this->validate($request, [
+            'text' => 'required|regex:/^\s*\S+(?:\s+\S+){4,}\s*$/',
+            'reviewee' => 'exists:users,id'
+        ]);
+
         $review = new Review();
         $review->text = $request->text;
-        $review->rating = $request->rating;
         $review->reviewee_id = $request->reviewee;
         
         $studentId = Assessment::findOrFail($assessmentId)->students->random(1)->first()->id;
         $assessmentStudent = AssessmentStudent::where('assessment_id', $assessmentId)
-        ->where('student_id', $studentId)
-        ->firstOrFail();
+                            ->where('student_id', $studentId)
+                            ->firstOrFail();
         
         $review->assessment_student_id = $assessmentStudent->id;
         
