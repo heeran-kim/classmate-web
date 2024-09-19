@@ -3,16 +3,13 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use App\Models\Course;
 use App\Models\Assessment;
 use App\Models\AssessmentStudent;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Foundation\Validation\ValidatesRequests; 
 
 class AssessmentController extends Controller
 {
-    use ValidatesRequests;  // 트레이트 추가
-    
     /**
      * Display a listing of the resource.
      */
@@ -35,7 +32,7 @@ class AssessmentController extends Controller
      */
     public function store(Request $request)
     {
-        $this->validate($request, [
+        $request->validate($request, [
             'title' => 'required|max:20',
             'num_required_reviews' => 'required|integer|min:1',
             'max_score' => 'required|integer|min:1|max:100',
@@ -138,7 +135,7 @@ class AssessmentController extends Controller
      */
     public function update(Request $request, string $assessmentId)
     {
-        $this->validate($request, [
+        $request->validate($request, [
             'title' => 'required|max:20',
             'num_required_reviews' => 'required|integer|min:1',
             'max_score' => 'required|integer|min:1|max:100',
@@ -163,7 +160,7 @@ class AssessmentController extends Controller
     public function assignScore(Request $request, string $assessmentId, string $studentId)
     {
         $maxScore = Assessment::findOrFail($assessmentId)->max_score;
-        $this->validate($request, [
+        $request->validate($request, [
             'score' => 'required|max:'.$maxScore
         ]);
 

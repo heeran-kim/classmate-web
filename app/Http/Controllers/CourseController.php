@@ -2,17 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 use App\Models\Course;
 use App\Models\CourseUser;
-use Illuminate\Http\Request;
 use App\Models\AssessmentStudent;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Foundation\Validation\ValidatesRequests; 
 
 class CourseController extends Controller
 {
-    use ValidatesRequests;  // 트레이트 추가
     /**
      * Display a listing of the resource.
      */
@@ -90,7 +88,7 @@ class CourseController extends Controller
 
     public function enroll(Request $request, string $courseId)
     {
-        $this->validate($request, [
+        $request->validate($request, [
             'student' => 'exists:users,id'
         ]);
 
