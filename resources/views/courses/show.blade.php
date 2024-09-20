@@ -22,7 +22,7 @@
                             <div class="fw-bold">{{$assessment->title}}</div>
                             <i class="bi bi-calendar"></i> {{$assessment->due_date}}
                         </div>
-                        <div class="">
+                        <div>
                             <div class="badge text-bg-primary rounded-pill">
                                 {{$assessment->max_score}} points
                             </div>
