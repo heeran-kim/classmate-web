@@ -26,31 +26,30 @@ class AssessmentController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'title' => 'required|max:20',
-            'num_required_reviews' => 'required|integer|min:1',
-            'max_score' => 'required|integer|min:1|max:100',
-            'due_date' => 'required',
-            'type' => 'required|in:student-select,teacher-assign',
-            'courseId' => 'exists:courses,id'
+            'title'                 => 'required|max:20',
+            'num_required_reviews'  => 'required|integer|min:1',
+            'max_score'             => 'required|integer|min:1|max:100',
+            'due_date'              => 'required',
+            'type'                  => 'required|in:student-select,teacher-assign',
+            'courseId'              => 'exists:courses,id'
         ]);
 
         $assessment = new Assessment();
-        $assessment->course_id = $request->courseId;
-        $assessment->title = $request->title;
-        $assessment->instruction = $request->instruction;
-        $assessment->num_required_reviews = $request->num_required_reviews;
-        $assessment->max_score = $request->max_score;
-        $assessment->due_date = $request->due_date;
-        $assessment->type = $request->type;
+        $assessment->course_id              = $request->courseId;
+        $assessment->title                  = $request->title;
+        $assessment->instruction            = $request->instruction;
+        $assessment->num_required_reviews   = $request->num_required_reviews;
+        $assessment->max_score              = $request->max_score;
+        $assessment->due_date               = $request->due_date;
+        $assessment->type                   = $request->type;
         $assessment->save();
-        $id = $assessment->id;
         
         $students = Course::FindOrFail($request->courseId)->students;
         foreach ($students as $student) {
             $assessment->students()->attach($student->id);
         }
 
-        return redirect("assessment/$id");
+        return redirect("assessment/$assessment->id");
     }
 
     /**
@@ -70,7 +69,7 @@ class AssessmentController extends Controller
                                     ->whereNotIn('users.id', $revieweeIds)
                                     ->where('users.id', '!=', $reviewer->id)
                                     ->get();
-            
+
             return view("assessments.show")
             ->with('assessment', $assessment)
             ->with('reviewsSubmitted', $reviewsSubmitted)
@@ -112,19 +111,19 @@ class AssessmentController extends Controller
     public function update(Request $request, Assessment $assessment)
     {
         $request->validate([
-            'title' => 'required|max:20',
-            'num_required_reviews' => 'required|integer|min:1',
-            'max_score' => 'required|integer|min:1|max:100',
-            'due_date' => 'required',
-            'type' => 'required|in:student-select,teacher-assign'
+            'title'                 => 'required|max:20',
+            'num_required_reviews'  => 'required|integer|min:1',
+            'max_score'             => 'required|integer|min:1|max:100',
+            'due_date'              => 'required',
+            'type'                  => 'required|in:student-select,teacher-assign'
         ]);
 
-        $assessment->title = $request->title;
-        $assessment->instruction = $request->instruction;
-        $assessment->num_required_reviews = $request->num_required_reviews;
-        $assessment->max_score = $request->max_score;
-        $assessment->due_date = $request->due_date;
-        $assessment->type = $request->type;
+        $assessment->title                  = $request->title;
+        $assessment->instruction            = $request->instruction;
+        $assessment->num_required_reviews   = $request->num_required_reviews;
+        $assessment->max_score              = $request->max_score;
+        $assessment->due_date               = $request->due_date;
+        $assessment->type                   = $request->type;
         $assessment->save();
         
         return redirect("assessment/$assessment->id");

@@ -6,8 +6,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 use App\Models\Course;
-use App\Models\CourseUser;
-use App\Models\AssessmentStudent;
 
 class CourseController extends Controller
 {
@@ -25,7 +23,6 @@ class CourseController extends Controller
      */
     public function show(Course $course)
     {
-        //dd($course->users);
         // TODO: $teachers, $assessments 필요?
         $teachers = $course->teachers;
         $assessments = $course->assessments;
