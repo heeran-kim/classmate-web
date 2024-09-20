@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class AssessmentStudent extends Model
 {
+    protected $table = 'assessment_student';
+    
     use HasFactory;
 
     function assessment() {
