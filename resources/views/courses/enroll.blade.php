@@ -1,25 +1,32 @@
 <x-master title="| Enroll Student">
-<h1>Enroll a Student</h1>
-
-@if (count($errors) > 0)
-    <div class="alert">
-        <ul>
-            @foreach ($errors->all() as $error)
-            <li>{{$error}}</li>
-            @endforeach
-        </ul>
+    <div class="container">
+        <h3 class="ms-1 mb-3">{{$course->name}} ({{$course->code}})</h3>
+        <hr>
+        <h4>Enroll Student</h4>
+        @if (count($errors) > 0)
+            <div class="alert">
+                <ul>
+                    @foreach ($errors->all() as $error)
+                    <li>{{$error}}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
+        <div class="bg-light p-3 border rounded shadow-sm m-3">
+            <form method="POST" action="{{ route('course.enroll', ['course' => $course->id]) }}">
+                @csrf
+                <ul class="list-group" style="max-height: 300px; overflow-y: auto;">
+                    @foreach ($students as $student)
+                        <li class="list-group-item">
+                            <input class="form-check-input me-1" type="checkbox" value="{{$student->id}}" name="students[]"
+                            {{ is_array(old('student')) && in_array($student->id, old('student')) ? 'checked' : '' }}>
+                            <label class="form-check-label">{{$student->name}}</label>
+                        </li>
+                    @endforeach
+                </ul>
+                <button type="submit" class="btn btn-primary mt-3">Enroll</button>
+            </form>
+        </div>
+        <a href="{{ route('course.show', ['course' => $course->id]) }}">Back</button>
     </div>
-@endif
-
-<form method="POST" action="{{ route('course.enroll', ['course' => $course->id]) }}">
-    @csrf
-
-    <p><select name="student">
-        @foreach ($students as $student)
-        <option value="{{$student->id}}" {{old('student') == $student->id ? 'selected' : ''}}>{{$student->name}}</option>
-        @endforeach
-    </select></p>
-    <button type="submit">Enroll</button>
-</form>
-<a href="{{ route('course.show', ['course' => $course->id]) }}">Back</button>
 </x-master>

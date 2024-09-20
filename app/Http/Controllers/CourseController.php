@@ -43,15 +43,17 @@ class CourseController extends Controller
     public function enroll(Request $request, Course $course)
     {
         $request->validate([
-            'student' => 'exists:users,id'
+            'students' => 'required|array',
+            'students.*' => 'exists:users,id',
         ]);
         
-        $course->users()->attach($request->student);
-
         $assessments = $course->assessments;
-
-        foreach ($assessments as $assessment) {
-            $assessment->students()->attach($request->student);
+        foreach ($request->students as $student)
+        {
+            $course->users()->attach($student);
+            foreach ($assessments as $assessment) {
+                $assessment->students()->attach($student);
+            }
         }
 
         return redirect("course/$course->id/enroll");

@@ -26,6 +26,7 @@ class Assessment extends Model
 
     function students() {
         return $this->belongsToMany(User::class, 'assessment_student', 'assessment_id', 'student_id')
-                    ->withPivot('score');
+                    ->withPivot('score')
+                    ->orderBy('name');
     }
 }
