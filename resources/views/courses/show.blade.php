@@ -1,12 +1,5 @@
 <x-master title="| {{$course->code}}">
-    <div class="container">
-        <a
-            href="{{ route('course.show', ['course' => $course->id]) }}"
-            class="text-decoration-none text-reset"
-        >
-            <h3 class="ms-1 mb-3">{{$course->name}} ({{$course->code}})</h3>
-        </a>
-        <hr>
+    <x-course-header :course="$course">
         <h4>Teaching Staff</h4>
         <ul>
             @foreach ($teachers as $teacher)
@@ -49,5 +42,5 @@
         <a href="{{ route('course.enrollPage', ['course' => $course->id]) }}"><button type="button" class="btn btn-outline-primary me-2">Enroll Student</button></a>
         <a href="{{ route('assessment.create', ['courseId' => $course->id]) }}"><button type="button" class="btn btn-outline-primary">Create Assessment</button></a>
         @endif
-    </div>
+    </x-course-header>
 </x-master>

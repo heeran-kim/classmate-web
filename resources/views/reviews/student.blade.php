@@ -1,12 +1,5 @@
 <x-master title="| {{$student->name}}">
-    <div class="container">
-        <a
-            href="{{ route('course.show', ['course' => $assessment->course->id]) }}"
-            class="text-decoration-none text-reset"
-        >
-            <h3 class="ms-1 mb-3">{{$assessment->course->name}} ({{$assessment->course->code}})</h3>
-        </a>
-        <hr>
+    <x-course-header :course="$assessment->course">
         <a
             href="{{ route('assessment.show', ['assessment' => $assessment->id]) }}"
             class="text-decoration-none text-reset"
@@ -52,5 +45,5 @@
                 <button type="submit" class="btn btn-primary mx-3">Submit</button>
             </form>
         </div>
-    </div>
+    </x-course-header>
 </x-master>

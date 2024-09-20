@@ -1,12 +1,5 @@
 <x-master title="| {{$assessment->title}}">
-    <div class="container">
-        <a
-            href="{{ route('course.show', ['course' => $assessment->course->id]) }}"
-            class="text-decoration-none text-reset"
-        >
-            <h3 class="ms-1 mb-3">{{$assessment->course->name}} ({{$assessment->course->code}})</h3>
-        </a>
-        <hr>
+    <x-course-header :course="$assessment->course">
         @if (Auth::user()->type == 'student')
             <h4>{{$assessment->title}}</h4>
             <div class="bg-light p-3 border rounded m-3">
@@ -46,7 +39,7 @@
                 <form method="POST" action="{{ route('assessment.review.store', ['assessment' => $assessment->id]) }}">
                     @csrf
                     <div class="row m-2">
-                        <div class="col-6">
+                        <div class="col-12 col-sm-6">
                             <label class="form-label">Reviewee</label>
                             <select name="reviewee" class="form-select">
                                 @foreach ($potentialReviewees as $potentialReviewee)
@@ -57,7 +50,7 @@
                             <small class="text-danger">{{ $errors->first('reviewee') }}</small>
                             @endif
                         </div>
-                        <div class="col-6">
+                        <div class="col-12 col-sm-6">
                             <label class="form-label">Review</label>
                             <input type="text" class="form-control" name="text" value="{{old('text')}}"></input>
                             @if ($errors->has('text'))
@@ -107,5 +100,5 @@
         @endif
         {{$students->links()}}
         @endif
-    </div>
+    </x-course-header>
 </x-master>

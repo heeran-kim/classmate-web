@@ -1,12 +1,5 @@
 <x-master title="| Edit Assessment">
-    <div class="container">
-        <a
-            href="{{ route('course.show', ['course' => $course->id]) }}"
-            class="text-decoration-none text-reset"
-        >
-            <h3 class="ms-1 mb-3">{{$course->name}} ({{$course->code}})</h3>
-        </a>
-        <hr>    
+    <x-course-header :course="$course">
         <h4>Edit Assessment</h4>
         <div class="bg-light p-3 border rounded shadow-sm m-3">
             <form method="POST" action="{{ route('assessment.update', ['assessment' => $assessment->id]) }}" class="row g-3">
@@ -62,5 +55,5 @@
                 </div>
             </form>
         </div>
-    </div>
+    </x-course-header>
 </x-master>
