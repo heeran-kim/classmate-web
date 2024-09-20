@@ -31,7 +31,7 @@ class UsersTableSeeder extends Seeder
         }
 
         // Seed 10 students
-        for ($i = 0; $i < 10; $i++) {
+        for ($i = 0; $i < 50; $i++) {
             DB::table('users')->insert([
                 'name' => $faker->name,  // Use Faker to generate random name
                 'email' => $faker->unique()->safeEmail,  // Use Faker to generate random unique email

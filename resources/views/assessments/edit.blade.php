@@ -10,7 +10,7 @@
     </div>
     @endif
 
-<form method="POST" action="{{ route('course.assessment.update', ['course' => $course->id, 'assessment' => $assessment->id]) }}">
+<form method="POST" action="{{ route('assessment.update', ['assessment' => $assessment->id]) }}">
     @csrf
     @method('PUT')
 

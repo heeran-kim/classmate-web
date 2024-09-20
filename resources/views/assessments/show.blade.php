@@ -54,6 +54,7 @@
     </a>
 @endforeach
 </ul>
+{{$students->links()}}
 @endif
 <a href="{{ route('course.show', ['course' => $assessment->course->id]) }}">Back</button>
 </x-master>

@@ -4,7 +4,7 @@ namespace Database\Seeders;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Seeder;
 
-class CourseUsersTableSeeder extends Seeder
+class CourseUserTableSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -33,7 +33,7 @@ class CourseUsersTableSeeder extends Seeder
         }
 
         // Enroll the first 8 students (IDs 5 to 12) in Course 1
-        for ($i = 5; $i <= 12; $i++) {
+        for ($i = 5; $i <= 47; $i++) {
             DB::table('course_user')->insert([
                 'course_id' => 1,
                 'user_id' => $i,  // Students 5 to 12 for Course 1

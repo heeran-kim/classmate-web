@@ -74,7 +74,7 @@ class AssessmentController extends Controller
         }
         else {
             $reviewCount = $assessment->reviews()->count();
-            $students = $assessment->students;
+            $students = $assessment->students()->paginate(10);
             
             $studentsData = [];
             foreach ($students as $student) {
