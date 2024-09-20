@@ -25,7 +25,10 @@ class CourseController extends Controller
     {
         // TODO: $teachers, $assessments 필요?
         $teachers = $course->teachers;
-        $assessments = $course->assessments;
+        $assessments = $course->assessments()
+                        ->with(['students' => function ($query) {
+                            $query->where('users.id', Auth::id());
+                        }])->get();
         return view('courses.show')->with('teachers', $teachers)->with('assessments', $assessments)->with('course', $course);
     }
 

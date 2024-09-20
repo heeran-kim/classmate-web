@@ -27,11 +27,9 @@
                                 {{$assessment->max_score}} points
                             </div>
                             <div class="text-center">
-                                {{-- @if (Auth::user()->type == 'student')
-                                    {{ $assessment->student->first()->pivot->score ?? 0 }} / {{ $assessment->max_score }}
-                                @else
-                                    {{ count($assessment->students) }} / {{ count($assessment->students) }}
-                                @endif --}}
+                                @if (Auth::user()->type == 'student')
+                                    {{ $assessment->students->first()->pivot->score ?? 0 }} / {{ $assessment->max_score }}
+                                @endif
                             </div>
                         </div>
                     </li>
