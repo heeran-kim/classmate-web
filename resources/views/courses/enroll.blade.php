@@ -1,4 +1,4 @@
-<x-master>
+<x-master title="| Enroll Student">
 <h1>Enroll a Student</h1>
 
 @if (count($errors) > 0)

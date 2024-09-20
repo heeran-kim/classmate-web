@@ -1,4 +1,4 @@
-<x-master>
+<x-master title="| Edit Assessment">
 <h1>Edit an Assessment</h1>
     @if (count($errors) > 0)
     <div class="alert">

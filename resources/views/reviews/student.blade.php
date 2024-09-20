@@ -1,4 +1,4 @@
-<x-master>
+<x-master title="| Student">
     <h2>{{$student->name}}</h2>
     <h3>Peer Review Submitted</h3>
     <ul>

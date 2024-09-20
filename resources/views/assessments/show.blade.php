@@ -1,4 +1,4 @@
-<x-master>
+<x-master title="| {{$assessment->title}}">
 @if (Auth::user()->type == 'student')
     <p>{{$assessment->title}}</p>
     <p>{{$assessment->instruction}}</p>

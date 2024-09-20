@@ -1,4 +1,4 @@
-<x-master>
+<x-master title="| Create Assessment">
     <h1>Create a new Assessment</h1>
     @if (count($errors) > 0)
     <div class="alert">

@@ -1,4 +1,4 @@
-<x-master>
+<x-master title="| {{$course->code}}">
 <ul>
     @foreach ($teachers as $teacher)
     <li>{{$teacher->name}} {{$teacher->s_number}} {{$teacher->email}}</li>
