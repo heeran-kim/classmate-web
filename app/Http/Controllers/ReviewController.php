@@ -40,6 +40,7 @@ class ReviewController extends Controller
      * Display the specified resource.
      */
     public function showStudentReviews(Assessment $assessment, User $student){
+        dd($assessment->reviews);
         $reviewsSubmitted = $assessment->reviews()->where('student_id', $student->id)->get();
         $reviewsReceived = $assessment->reviews()->where('reviewee_id', $student->id)->get();
         $score = AssessmentStudent::where('assessment_id', $assessment->id)

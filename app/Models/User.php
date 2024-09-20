@@ -49,15 +49,8 @@ class User extends Authenticatable
 
     public function courses()
     {
-        // This method defines a hasManyThrough relationship from User to Course through the CourseUser pivot table.
-        return $this->hasManyThrough(
-            Course::class,       // The final model we want to retrieve (Course model).
-            CourseUser::class,   // The intermediate model that connects User and Course (CourseUser model).
-            'user_id',           // Foreign key on the intermediate model.
-            'id',                // Foreign key on the final model (Course) that links to the intermediate table (course_id).
-            'id',                // Local key on the current model.
-            'course_id'          // Local key on the intermediate model that links to the final model.
-        )->orderBy('code');
+        return $this->belongsToMany(Course::class)
+                    ->orderBy('code');
     }
     
     function reviews() {

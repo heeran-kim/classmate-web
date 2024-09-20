@@ -59,7 +59,6 @@ class AssessmentController extends Controller
     /**
      * Display the specified resource.
      */
-    // Auth 로 접근
     public function show(Assessment $assessment)
     {
         if (Auth::user()->type == 'student') {
@@ -84,7 +83,7 @@ class AssessmentController extends Controller
         else {
             $reviewCount = $assessment->reviews()->count();
             $students = $assessment->students;
-            
+            dd($students);
             $studentsData = [];
             foreach ($students as $student) {
                 $id = $student->id;

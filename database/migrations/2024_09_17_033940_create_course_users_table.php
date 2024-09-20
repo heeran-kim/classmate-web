@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('course_users', function (Blueprint $table) {
+        Schema::create('course_user', function (Blueprint $table) {
             $table->id();
 
             $table->unsignedBigInteger('course_id');
@@ -30,6 +30,6 @@ return new class extends Migration
     public function down(): void
     {
         Schema::disableForeignKeyConstraints();
-        Schema::dropIfExists('course_users');
+        Schema::dropIfExists('course_user');
     }
 };

@@ -12,7 +12,7 @@ class AssessmentStudentsTableSeeder extends Seeder
      */
     public function run(): void
     {
-        DB::table('assessment_students')->insert([
+        DB::table('assessment_student')->insert([
             ['assessment_id' => 1, 'student_id' => 1, 'score' => 90],
             ['assessment_id' => 1, 'student_id' => 2, 'score' => 85],
             ['assessment_id' => 1, 'student_id' => 3, 'score' => 88],

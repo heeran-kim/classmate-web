@@ -25,13 +25,6 @@ class Assessment extends Model
     }
 
     function students() {
-        return $this->hasManyThrough(
-            User::class,
-            AssessmentStudent::class,
-            'assessment_id',
-            'id',
-            'id',
-            'student_id'
-        );
+        return $this->belongsToMany(User::class, 'assessment_student', 'assessment_id', 'student_id');
     }
 }

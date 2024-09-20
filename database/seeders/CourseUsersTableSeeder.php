@@ -12,7 +12,7 @@ class CourseUsersTableSeeder extends Seeder
      */
     public function run(): void
     {
-        DB::table('course_users')->insert([
+        DB::table('course_user')->insert([
             ['course_id' => 1, 'user_id' => 1],  // Alice가 CS101 수강
             ['course_id' => 1, 'user_id' => 2],  // Bob이 CS101 수강
             ['course_id' => 1, 'user_id' => 3],  // Charlie가 CS101 수강
