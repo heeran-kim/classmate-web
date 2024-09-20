@@ -33,7 +33,7 @@ class AssessmentController extends Controller
             'type'                  => 'required|in:student-select,teacher-assign',
             'courseId'              => 'exists:courses,id'
         ]);
-
+        
         $assessment = new Assessment();
         $assessment->course_id              = $request->courseId;
         $assessment->title                  = $request->title;
@@ -98,7 +98,7 @@ class AssessmentController extends Controller
      */
     public function edit(Assessment $assessment)
     {
-        return view("assessments.edit")->with('assessment', $assessment);
+        return view("assessments.edit")->with('assessment', $assessment)->with('course', $assessment->course);
     }
 
     /**
@@ -113,7 +113,7 @@ class AssessmentController extends Controller
             'due_date'              => 'required',
             'type'                  => 'required|in:student-select,teacher-assign'
         ]);
-
+        
         $assessment->title                  = $request->title;
         $assessment->instruction            = $request->instruction;
         $assessment->num_required_reviews   = $request->num_required_reviews;

@@ -4,6 +4,7 @@
         <hr>    
         <h4>Create Assessment</h4>
         @if (count($errors) > 0)
+        <!-- todo: text in red on alert -->
             <div class="alert">
                 <ul>
                     @foreach ($errors->all() as $error)
