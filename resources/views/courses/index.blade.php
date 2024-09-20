@@ -12,8 +12,7 @@
                         >
                         <img src="{{ asset('images/course' . $course->id . '.png') }}" class="card-img-top border">
                             <div class="card-body">
-                                <h5 class="card-title">{{$course->name}}</h5>
-                                <!-- todo: course card 크기 맞추기 -->
+                                <h5 class="card-title text-truncate">{{$course->name}}</h5>
                                 <p class="card-title">{{$course->code}}</p>
                             </div>
                         </a>
