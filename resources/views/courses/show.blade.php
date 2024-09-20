@@ -11,20 +11,33 @@
         <hr>
         <h4>Assessment</h4>
         @if (count($assessments))
+            <ul class="list-group m-3">
             @foreach ($assessments as $assessment)
-                <div class="card shadow-sm m-3">
-                    <a
-                        href="{{ route('assessment.show', ['assessment' => $assessment->id]) }}"
-                        class="text-decoration-none text-reset"
-                    >
-                    {{-- <img src="{{ asset('images/course' . $course->id . '.png') }}" class="card-img-top border"> --}}
-                        <div class="card-body">
-                            <h5 class="card-title">{{$assessment->title}}</h5>
-                            <p class="card-title"><i class="bi bi-calendar"></i> {{$assessment->due_date}}</p>
+                <a
+                    href="{{ route('assessment.show', ['assessment' => $assessment->id]) }}"
+                    class="text-decoration-none text-reset"
+                >
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <div class="ms-2 me-auto">
+                            <div class="fw-bold">{{$assessment->title}}</div>
+                            <i class="bi bi-calendar"></i> {{$assessment->due_date}}
                         </div>
-                    </a>
-                </div>
+                        <div class="">
+                            <div class="badge text-bg-primary rounded-pill">
+                                {{$assessment->max_score}} points
+                            </div>
+                            <div class="text-center">
+                                {{-- @if (Auth::user()->type == 'student')
+                                    {{ $assessment->student->first()->pivot->score ?? 0 }} / {{ $assessment->max_score }}
+                                @else
+                                    {{ count($assessment->students) }} / {{ count($assessment->students) }}
+                                @endif --}}
+                            </div>
+                        </div>
+                    </li>
+                </a>
             @endforeach
+            </ul>
         @else
             <div class="text-center">No Assessments Created Yet</div>
         @endif

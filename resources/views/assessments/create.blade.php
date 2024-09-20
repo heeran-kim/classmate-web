@@ -1,6 +1,6 @@
 <x-master title="| Create Assessment">
     <div class="container">
-        {{-- <h3 class="ms-1 mb-3">{{$course->name}} ({{$course->code}})</h3> --}}
+        <h3 class="ms-1 mb-3">{{$course->name}} ({{$course->code}})</h3>
         <hr>    
         <h4>Create Assessment</h4>
         @if (count($errors) > 0)
@@ -47,6 +47,6 @@
                 </div>
             </form>
         </div>
-        <a href="{{ route('course.show', ['course' => $courseId]) }}">Back</button>
+        <a href="{{ route('course.show', ['course' => $course->id]) }}">Back</button>
     </div>
 </x-master>

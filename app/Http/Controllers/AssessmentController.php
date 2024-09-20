@@ -16,8 +16,8 @@ class AssessmentController extends Controller
      */
     public function create(Request $request)
     {
-        $courseId = $request->input('courseId');
-        return view('assessments.create')->with('courseId', $courseId);
+        $course = Course::findOrFail($request->input('courseId'));
+        return view('assessments.create')->with('course', $course);
     }
 
     /**
