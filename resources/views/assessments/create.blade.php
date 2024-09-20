@@ -1,6 +1,11 @@
 <x-master title="| Create Assessment">
     <div class="container">
-        <h3 class="ms-1 mb-3">{{$course->name}} ({{$course->code}})</h3>
+        <a
+            href="{{ route('course.show', ['course' => $course->id]) }}"
+            class="text-decoration-none text-reset"
+        >
+            <h3 class="ms-1 mb-3">{{$course->name}} ({{$course->code}})</h3>
+        </a>
         <hr>    
         <h4>Create Assessment</h4>
         <div class="bg-light p-3 border rounded shadow-sm m-3">
@@ -56,6 +61,5 @@
                 </div>
             </form>
         </div>
-        <a href="{{ route('course.show', ['course' => $course->id]) }}">Back</button>
     </div>
 </x-master>

@@ -1,33 +1,56 @@
-<x-master title="| Student">
-    <h2>{{$student->name}}</h2>
-    <h3>Peer Review Submitted</h3>
-    <ul>
-        @foreach ($reviewsSubmitted as $review)
-            <li>{{$review->reviewee->name}} {{$review->rating}} {{$review->text}}</li>
-        @endforeach
-    </ul>
-    <h3>Peer Review Received</h3>
-    <ul>
-        @foreach ($reviewsReceived as $review)
-            <li>{{$review->reviewer->name}} {{$review->rating}} {{$review->text}}</li>
-        @endforeach
-    </ul>
-    <h3>Assign Score</h3>
-
-    @if (count($errors) > 0)
-        <div class="alert">
-            <ul>
-                @foreach ($errors->all() as $error)
-                <li>{{$error}}</li>
-                @endforeach
-            </ul>
+<x-master title="| {{$student->name}}">
+    <div class="container">
+        <a
+            href="{{ route('course.show', ['course' => $assessment->course->id]) }}"
+            class="text-decoration-none text-reset"
+        >
+            <h3 class="ms-1 mb-3">{{$assessment->course->name}} ({{$assessment->course->code}})</h3>
+        </a>
+        <hr>
+        <a
+            href="{{ route('assessment.show', ['assessment' => $assessment->id]) }}"
+            class="text-decoration-none text-reset"
+        >
+            <h4>{{$assessment->title}}</h4>
+        </a>
+        <div class="bg-light p-3 border rounded shadow-sm m-3">
+            <h5>{{$student->name}}</h5>
+            <h6>Peer Review Submitted</h6>
+            <div class="bg-white p-3 border rounded m-3">
+                @if (count($reviewsSubmitted))
+                    <ul>
+                        @foreach ($reviewsSubmitted as $review)
+                            <li>{{$review->reviewee->name}} {{$review->rating}} {{$review->text}}</li>
+                        @endforeach
+                    </ul>
+                @else
+                    <div class="text-center">No Reviews Submitted Yet</div>
+                @endif
+            </div>
+            <h6>Peer Review Received</h6>
+            <div class="bg-white p-3 border rounded m-3">
+                @if (count($reviewsSubmitted))
+                    <ul>
+                        @foreach ($reviewsReceived as $review)
+                            <li>{{$review->reviewer->name}} {{$review->rating}} {{$review->text}}</li>
+                        @endforeach
+                    </ul>
+                @else
+                <div class="text-center">No Reviews Received Yet</div>
+                @endif
+            </div>
+            <h6>Assign Score</h6>
+            <form method="POST" action=" {{ route('assessment.assignScore', ['assessment' => $assessment->id, 'student' => $student->id]) }} ">
+                @csrf
+                <div>
+                    <input type="number" class="bg-white p-2 border rounded my-3 ms-3 text-center" name="score" value="{{old('score', $score)}}" style="width: 70px;"></input>
+                    / {{$assessment->max_score}}
+                    @if ($errors->has('score'))
+                        <small class="text-danger"> {{ $errors->first('score') }}</small>
+                    @endif
+                </div>
+                <button type="submit" class="btn btn-primary mx-3">Submit</button>
+            </form>
         </div>
-    @endif
-
-    <form method="POST" action=" {{ route('assessment.assignScore', ['assessment' => $assessment->id, 'student' => $student->id]) }} ">
-        @csrf
-        <label>Score: </label><input type="number" name="score" value="{{old('score', $score)}}"></input>
-        <button type="submit">Submit</button>
-    </form>
-    <a href="{{ route('assessment.show', ['assessment' => $assessment->id]) }}">Back</button>
+    </div>
 </x-master>

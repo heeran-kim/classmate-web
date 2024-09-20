@@ -1,6 +1,11 @@
 <x-master title="| {{$course->code}}">
     <div class="container">
-        <h3 class="ms-1 mb-3">{{$course->name}} ({{$course->code}})</h3>
+        <a
+            href="{{ route('course.show', ['course' => $course->id]) }}"
+            class="text-decoration-none text-reset"
+        >
+            <h3 class="ms-1 mb-3">{{$course->name}} ({{$course->code}})</h3>
+        </a>
         <hr>
         <h4>Teaching Staff</h4>
         <ul>

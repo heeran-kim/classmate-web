@@ -1,6 +1,11 @@
 <x-master title="| Enroll Student">
     <div class="container">
-        <h3 class="ms-1 mb-3">{{$course->name}} ({{$course->code}})</h3>
+        <a
+            href="{{ route('course.show', ['course' => $course->id]) }}"
+            class="text-decoration-none text-reset"
+        >
+            <h3 class="ms-1 mb-3">{{$course->name}} ({{$course->code}})</h3>
+        </a>
         <hr>
         <h4>Enroll Student</h4>
         @if (count($errors) > 0)
@@ -27,6 +32,5 @@
                 <button type="submit" class="btn btn-primary mt-3">Enroll</button>
             </form>
         </div>
-        <a href="{{ route('course.show', ['course' => $course->id]) }}">Back</button>
     </div>
 </x-master>

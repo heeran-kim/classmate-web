@@ -130,11 +130,7 @@ class AssessmentController extends Controller
         $request->validate([
             'score' => 'required|integer|max:'.$assessment->max_score
         ]);
-        $assessmentStudent = AssessmentStudent::where('assessment_id', $assessment->id)
-                            ->where('student_id', $student->id)
-                            ->firstOrFail();
-        $assessmentStudent->score = $request->score;
-        $assessmentStudent->save();
+        $assessment->students()->updateExistingPivot($student->id, ['score' => $request->score]);
         return back();
     }
 }

@@ -1,6 +1,11 @@
 <x-master title="| {{$assessment->title}}">
     <div class="container">
-        <h3 class="ms-1 mb-3">{{$assessment->course->name}} ({{$assessment->course->code}})</h3>
+        <a
+            href="{{ route('course.show', ['course' => $assessment->course->id]) }}"
+            class="text-decoration-none text-reset"
+        >
+            <h3 class="ms-1 mb-3">{{$assessment->course->name}} ({{$assessment->course->code}})</h3>
+        </a>
         <hr>
         @if (Auth::user()->type == 'student')
             <p>{{$assessment->instruction}}</p>
@@ -44,7 +49,7 @@
             </form>
 
         @else
-        <div class="d-flex justify-content-between align-items-center">
+        <div class="d-flex justify-content-between">
             <h4>{{$assessment->title}}</h4>
             @if($reviewCount === 0)
                 <a
@@ -82,6 +87,5 @@
         @endif
         {{$students->links()}}
         @endif
-        <a href="{{ route('course.show', ['course' => $assessment->course->id]) }}">Back</button>
     </div>
 </x-master>
