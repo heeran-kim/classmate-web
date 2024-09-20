@@ -7,17 +7,6 @@ use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-// Function to generate a unique snumber
-function generateUniqueSnumber($type)
-{
-    do {
-        $snumber = ($type === 'teacher')
-            ? 'S1' . fake()->regexify('[0-9]{3}')  // Teacher: S1XXX
-            : 'S0' . fake()->regexify('[0-9]{3}'); // Student: S0XXX
-    } while (User::where('snumber', $snumber)->exists());
-
-    return $snumber;
-}
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\User>
  */
@@ -35,16 +24,13 @@ class UserFactory extends Factory
      */
     public function definition(): array
     {
-        $type = $this->faker->randomElement(['teacher', 'student']);
-        $snumber = generateUniqueSnumber($type);
-
         return [
             'name' => fake()->name(),
-            'snumber' => $snumber,
+            'snumber' => fake(),
             'email' => fake()->unique()->safeEmail(),
-            'password' => static::$password ??= Hash::make('password'),
+            'password' => Hash::make('password'),
             'remember_token' => Str::random(10),
-            'type' => $type,
+            'type' => fake(),
         ];
     }
 

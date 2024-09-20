@@ -1,9 +1,10 @@
 <?php
 
 namespace Database\Seeders;
+
 use Illuminate\Support\Facades\DB;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Faker\Factory as Faker;
 
 class ReviewsTableSeeder extends Seeder
 {
@@ -12,16 +13,49 @@ class ReviewsTableSeeder extends Seeder
      */
     public function run(): void
     {
-        DB::table('reviews')->insert([
-            // Alice가 작성한 리뷰
-            ['text' => 'Great work, very thorough!', 'rating' => 5, 'reviewee_id' => 2, 'assessment_student_id' => 1],  // Alice가 Bob 리뷰
-            ['text' => 'Good effort, but needs more detail.', 'rating' => 4, 'reviewee_id' => 3, 'assessment_student_id' => 1],  // Alice가 Charlie 리뷰
-            // Bob이 작성한 리뷰 (추가됨)
-            ['text' => 'Well organized, but a few errors.', 'rating' => 4, 'reviewee_id' => 1, 'assessment_student_id' => 2],  // Bob이 Alice 리뷰
-            ['text' => 'Solid work, just a bit unclear in parts.', 'rating' => 4, 'reviewee_id' => 3, 'assessment_student_id' => 2],  // Bob이 Charlie 리뷰
-            // Charlie가 작성한 리뷰 (추가됨)
-            ['text' => 'Fantastic work!', 'rating' => 5, 'reviewee_id' => 1, 'assessment_student_id' => 3],  // Charlie가 Alice 리뷰
-            ['text' => 'Keep practicing.', 'rating' => 3, 'reviewee_id' => 2, 'assessment_student_id' => 3],  // Charlie가 Bob 리뷰
-        ]);
+        $faker = Faker::create();  // Create a Faker instance
+
+        // Get all assessments
+        $assessments = DB::table('assessments')->get();
+
+        foreach ($assessments as $assessment) {
+            // Get all students with scores for this assessment (only students, no teachers)
+            $studentsWithScores = DB::table('assessment_student')
+                ->join('users', 'assessment_student.student_id', '=', 'users.id')  // Join with users to ensure the type
+                ->where('assessment_student.assessment_id', $assessment->id)
+                ->where('users.type', 'student')  // Ensure only students are included
+                ->whereNotNull('assessment_student.score')  // Only students with scores
+                ->select('assessment_student.*')  // Select only the necessary columns
+                ->get();
+
+            // Get the required number of reviews for this assessment
+            $numRequiredReviews = $assessment->num_required_reviews;
+
+            foreach ($studentsWithScores as $studentWithScore) {
+                // Get all students enrolled in the same course who are potential reviewees
+                $studentsInCourse = DB::table('course_user')
+                    ->join('users', 'course_user.user_id', '=', 'users.id')
+                    ->where('course_user.course_id', $assessment->course_id)
+                    ->where('users.type', 'student')  // Ensure only students are included
+                    ->where('course_user.user_id', '!=', $studentWithScore->student_id)  // Exclude the reviewer (student with score)
+                    ->pluck('course_user.user_id')->toArray();  // Get only student IDs
+
+                // Shuffle and select the required number of reviewees
+                shuffle($studentsInCourse);
+                $selectedReviewees = array_slice($studentsInCourse, 0, $numRequiredReviews);
+
+                foreach ($selectedReviewees as $revieweeId) {
+                    // Insert the review with varied review text
+                    DB::table('reviews')->insert([
+                        'text' => $faker->sentence(10),  // Generate random sentence with 10 words
+                        'rating' => rand(1, 5),  // Random rating between 1 and 5
+                        'reviewee_id' => $revieweeId,
+                        'assessment_student_id' => $studentWithScore->id,
+                        'created_at' => now(),
+                        'updated_at' => now(),
+                    ]);
+                }
+            }
+        }
     }
 }

@@ -1,9 +1,11 @@
 <?php
 
 namespace Database\Seeders;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use Faker\Factory as Faker;
+use Illuminate\Support\Str;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 
 class UsersTableSeeder extends Seeder
 {
@@ -12,11 +14,34 @@ class UsersTableSeeder extends Seeder
      */
     public function run(): void
     {
-        DB::table('users')->insert([
-            ['snumber' => 'S0001', 'password' => bcrypt('password'), 'name' => 'Alice', 'email' => 'alice@example.com', 'type' => 'student'],
-            ['snumber' => 'S0002', 'password' => bcrypt('password'), 'name' => 'Bob', 'email' => 'bob@example.com', 'type' => 'student'],
-            ['snumber' => 'S0003', 'password' => bcrypt('password'), 'name' => 'Charlie', 'email' => 'charlie@example.com', 'type' => 'student'],
-            ['snumber' => 'S1001', 'password' => bcrypt('password'), 'name' => 'Professor X', 'email' => 'professorx@example.com', 'type' => 'teacher'],
-        ]);
+        $faker = Faker::create(); // Create a Faker instance
+
+        // Seed 4 teachers
+        for ($i = 0; $i < 4; $i++) {
+            DB::table('users')->insert([
+                'name' => $faker->name,  // Use Faker to generate random name
+                'email' => $faker->unique()->safeEmail,  // Use Faker to generate random unique email
+                'type' => 'teacher',
+                'snumber' => 'S1' . str_pad($i, 3, '0', STR_PAD_LEFT), // S1000, S1001, etc.
+                'password' => Hash::make('password'),
+                'remember_token' => Str::random(10),
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
+        }
+
+        // Seed 10 students
+        for ($i = 0; $i < 10; $i++) {
+            DB::table('users')->insert([
+                'name' => $faker->name,  // Use Faker to generate random name
+                'email' => $faker->unique()->safeEmail,  // Use Faker to generate random unique email
+                'type' => 'student',
+                'snumber' => 'S0' . str_pad($i, 3, '0', STR_PAD_LEFT), // S0000, S0001, etc.
+                'password' => Hash::make('password'),
+                'remember_token' => Str::random(10),
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
+        }
     }
 }

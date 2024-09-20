@@ -41,21 +41,10 @@ class ReviewController extends Controller
      * Display the specified resource.
      */
     public function showStudentReviews(Assessment $assessment, User $student){
-        // TO DO: 새로 Enrolled 학생에 대해서 404
-        $assessmentId = (int) $assessment->id;
-        $studentId = (int) $student->id;
-        $exists = AssessmentStudent::where('assessment_id', $assessmentId)
-                                    ->where('student_id', $studentId)
-                                    ->exists();
-        $result = DB::select('select * from assessment_student where assessment_id = ? and student_id = ?', [$assessmentId, $studentId]);
-        dd($result);
-        
         $reviewsSubmitted = $assessment->reviews()->where('student_id', $student->id)->get();
         $reviewsReceived = $assessment->reviews()->where('reviewee_id', $student->id)->get();
-        $score = AssessmentStudent::where('assessment_id', $assessment->id)
-                            ->where('student_id', $student->id)
-                            ->firstOrFail()
-                            ->score;
+        $score = $assessment->students()->where('student_id', $student->id)->first()->pivot->score;
+        
         return view("reviews.student")
         ->with('assessment', $assessment)
         ->with('student', $student)
