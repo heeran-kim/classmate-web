@@ -25,6 +25,7 @@ class CourseController extends Controller
      */
     public function show(Course $course)
     {
+        //dd($course->users);
         // TODO: $teachers, $assessments 필요?
         $teachers = $course->teachers;
         $assessments = $course->assessments;
@@ -47,19 +48,13 @@ class CourseController extends Controller
         $request->validate([
             'student' => 'exists:users,id'
         ]);
-
-        $courseUser = new CourseUser();
-        $courseUser->course_id = $course->id;
-        $courseUser->user_id = $request->student;
-        $courseUser->save();
+        
+        $course->users()->attach($request->student);
 
         $assessments = $course->assessments;
 
         foreach ($assessments as $assessment) {
-            $assessmentStudent = new AssessmentStudent();
-            $assessmentStudent->assessment_id = $assessment->id;
-            $assessmentStudent->student_id = $request->student;
-            $assessmentStudent->save();
+            $assessment->students()->attach($request->student);
         }
 
         return redirect("course/$course->id/enroll");

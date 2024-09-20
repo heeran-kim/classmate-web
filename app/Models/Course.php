@@ -14,14 +14,18 @@ class Course extends Model
     }
 
     function teachers() {
-        return $this->belongsToMany(User::class)
+        return $this->users()
                     ->where('type', 'teacher')
                     ->orderBy('name');
     }
 
     function students() {
-        return $this->belongsToMany(User::class)
+        return $this->users()
                     ->where('type', 'student')
                     ->orderBy('name');
+    }
+
+    function users() {
+        return $this->belongsToMany(User::class);
     }
 }

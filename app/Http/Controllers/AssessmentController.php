@@ -47,10 +47,7 @@ class AssessmentController extends Controller
         
         $students = Course::FindOrFail($request->courseId)->students;
         foreach ($students as $student) {
-            $assessmentStudent = new AssessmentStudent();
-            $assessmentStudent->assessment_id = $id;
-            $assessmentStudent->student_id = $student->id;
-            $assessmentStudent->save();
+            $assessment->students()->attach($student->id);
         }
 
         return redirect("assessment/$id");
@@ -83,17 +80,14 @@ class AssessmentController extends Controller
         else {
             $reviewCount = $assessment->reviews()->count();
             $students = $assessment->students;
-            dd($students);
+            
             $studentsData = [];
             foreach ($students as $student) {
                 $id = $student->id;
                 $name = $student->name;
                 $received = $assessment->reviews()->where('reviewee_id', $student->id)->count();
                 $submitted = $assessment->reviews()->where('student_id', $student->id)->count();
-                $score = AssessmentStudent::where('assessment_id', $assessment->id)
-                                            ->where('student_id', $student->id)
-                                            ->pluck('score')
-                                            ->first();
+                $score = $student->pivot->score;
                 $studentsData[] = ['id'=>$id, 'name'=>$name, 'received'=>$received, 'submitted'=>$submitted, 'score'=>$score];
             }
             return view("assessments.show")

@@ -56,5 +56,9 @@ class User extends Authenticatable
     function reviews() {
         return $this->hasMany(Review::class);
     }
+
+    function assessments() {
+        return $this->belongsToMany(Assessment::class);
+    }
     
 }
