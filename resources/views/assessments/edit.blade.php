@@ -1,4 +1,4 @@
-<x-master title="| Edit Assessment">
+<x-master-layout title="| Edit Assessment">
     <x-course-header :course="$course">
         <h4>Edit Assessment</h4>
         <div class="bg-light p-3 border rounded shadow-sm m-3">
@@ -56,4 +56,4 @@
             </form>
         </div>
     </x-course-header>
-</x-master>
+</x-master-layout>

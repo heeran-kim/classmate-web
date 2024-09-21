@@ -1,4 +1,4 @@
-<x-master title="| {{$student->name}}">
+<x-master-layout title="| {{$student->name}}">
     <x-course-header :course="$assessment->course">
         <a
             href="{{ route('assessment.show', ['assessment' => $assessment->id]) }}"
@@ -46,4 +46,4 @@
             </form>
         </div>
     </x-course-header>
-</x-master>
+</x-master-layout>

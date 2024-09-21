@@ -1,4 +1,4 @@
-<x-master title="| {{$course->code}}">
+<x-master-layout title="| {{$course->code}}">
     <x-course-header :course="$course">
         <h4>Teaching Staff</h4>
         <ul>
@@ -43,4 +43,4 @@
         <a href="{{ route('assessment.create', ['courseId' => $course->id]) }}"><button type="button" class="btn btn-outline-primary">Create Assessment</button></a>
         @endif
     </x-course-header>
-</x-master>
+</x-master-layout>

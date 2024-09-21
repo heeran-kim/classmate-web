@@ -1,4 +1,4 @@
-<x-master title="| Enroll Student">
+<x-master-layout title="| Enroll Student">
     <x-course-header :course="$course">
         <h4>Enroll Student</h4>
         @if (count($errors) > 0)
@@ -26,4 +26,4 @@
             </form>
         </div>
     </x-course-header>
-</x-master>
+</x-master-layout>
