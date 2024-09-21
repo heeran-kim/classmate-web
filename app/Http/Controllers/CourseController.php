@@ -18,6 +18,19 @@ class CourseController extends Controller
         return view('courses.index')->with('courses', $courses);
     }
 
+    public function create()
+    {
+        return view('courses.create');
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     */
+    public function store(Request $request) 
+    {
+        
+    }
+
     /**
      * Display the specified resource.
      */

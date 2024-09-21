@@ -1,6 +1,15 @@
 <x-master-layout title="| Courses">
     <div class="container">
-        <h3 class="ms-1 mb-3">Courses ({{count($courses)}})</h3>
+
+        <div class="d-flex justify-content-between">
+            <h3 class="ms-1 mb-3">Courses ({{count($courses)}})</h3>
+            @if (Auth::user()->type == 'teacher')
+            <a href="{{ route('course.create') }}" class="text-decoration-none text-reset">
+                <button class="btn btn-primary mt-3">Create</button>
+            </a>
+            @endif
+        </div>
+
         @if (count($courses))
             <div class="row row-cols-1 row-cols-md-3 g-4">
                 @foreach ($courses as $course)
@@ -23,5 +32,7 @@
         @else
             <div class="text-center">No Courses Enrolled Yet</div>
         @endif
+
+
     </div>
 </x-master-layout>

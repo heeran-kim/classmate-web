@@ -1,4 +1,5 @@
 <x-master-layout title="| Edit Assessment">
+    <!-- todo: 상위 assessment 의 link 가 유지 되도록 -->
     <x-course-header :course="$course">
         <h4>Edit Assessment</h4>
         <div class="bg-light p-3 border rounded shadow-sm m-3">
