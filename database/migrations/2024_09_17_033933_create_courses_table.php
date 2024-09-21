@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('code');
             $table->string('name');
-// todo: image 추가
+            $table->string('image');
             $table->timestamps();
         });
     }

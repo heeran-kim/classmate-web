@@ -19,7 +19,7 @@
                             href="{{ route('course.show', ['course' => $course->id]) }}"
                             class="text-decoration-none text-reset"
                         >
-                        <img src="{{ asset('images/course' . $course->id . '.png') }}" class="card-img-top border">
+                        <img src="{{ asset($course->image) }}" class="card-img-top border">
                             <div class="card-body">
                                 <h5 class="card-title text-truncate">{{$course->name}}</h5>
                                 <p class="card-title">{{$course->code}}</p>

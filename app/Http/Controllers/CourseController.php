@@ -28,7 +28,19 @@ class CourseController extends Controller
      */
     public function store(Request $request) 
     {
+        $request->validate([
+            'jsonFile' => 'required|file|mimes:json|max:2048', // Ensure it's a valid JSON file
+        ]);
+     
+        // Get the uploaded file
+        $file = $request->file('jsonFile');
+     
+        // Read the contents of the file
+        $jsonContents = file_get_contents($file->getPathName());
+
+        dd($jsonContents);
         
+        $image_store = request()->file('image')->store('images/courses_images', 'public');
     }
 
     /**

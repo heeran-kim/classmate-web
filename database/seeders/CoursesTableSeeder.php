@@ -14,8 +14,8 @@ class CoursesTableSeeder extends Seeder
     public function run(): void
     {
         DB::table('courses')->insert([
-            ['code' => '7805ICT', 'name' => 'Software Design'],
-            ['code' => '7004ICT', 'name' => 'Computer Networking Essentials'],
+            ['code' => '7805ICT', 'name' => 'Software Design', 'image' => 'images/courses_images/software_design.png'],
+            ['code' => '7004ICT', 'name' => 'Computer Networking Essentials', 'image' => 'images/courses_images/7004ICT.png'],
         ]);
     }
 }
