@@ -1,12 +1,5 @@
 <x-master title="| Enroll Student">
-    <div class="container">
-        <a
-            href="{{ route('course.show', ['course' => $course->id]) }}"
-            class="text-decoration-none text-reset"
-        >
-            <h3 class="ms-1 mb-3">{{$course->name}} ({{$course->code}})</h3>
-        </a>
-        <hr>
+    <x-course-header :course="$course">
         <h4>Enroll Student</h4>
         @if (count($errors) > 0)
             <div class="alert">
@@ -32,5 +25,5 @@
                 <button type="submit" class="btn btn-primary mt-3">Enroll</button>
             </form>
         </div>
-    </div>
+    </x-course-header>
 </x-master>
