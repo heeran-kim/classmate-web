@@ -49,9 +49,8 @@
                             <x-input-error :messages="$errors->get('reviewee')" class="mt-2" />
                         </div>
                         <div class="col-12 col-sm-6">
-                            <!-- todo: label 변경 -->
-                            <label class="form-label">Review</label>
-                            <input type="text" class="form-control" name="text" value="{{old('text')}}"></input>
+                            <x-input-label for="text" :value="__('Review')" />
+                            <x-text-input id="text" class="d-block mt-1 w-100" name="review" :value="old('text')" />
                             <x-input-error :messages="$errors->get('text')" class="mt-2" />
 
                         </div>

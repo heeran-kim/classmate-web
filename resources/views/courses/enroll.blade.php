@@ -1,15 +1,6 @@
 <x-master-layout title="| Enroll Student">
     <x-course-header :course="$course">
         <h4>Enroll Student</h4>
-        @if (count($errors) > 0)
-            <div class="alert">
-                <ul>
-                    @foreach ($errors->all() as $error)
-                    <li>{{$error}}</li>
-                    @endforeach
-                </ul>
-            </div>
-        @endif
         <div class="bg-light p-3 border rounded shadow-sm m-3">
             <form method="POST" action="{{ route('course.enroll', ['course' => $course->id]) }}">
                 @csrf
@@ -22,6 +13,7 @@
                         </li>
                     @endforeach
                 </ul>
+                <x-input-error :messages="$errors->get('student')" class="mt-2" />
                 <button type="submit" class="btn btn-primary mt-3">Enroll</button>
             </form>
         </div>

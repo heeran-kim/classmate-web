@@ -38,6 +38,7 @@
                 <div>
                     <input class="bg-white p-2 border rounded my-3 ms-3 text-center" name="score" value="{{old('score', $score)}}" style="width: 70px;"></input>
                     / {{$assessment->max_score}}
+                    {{-- todo: error --}}
                     @if ($errors->has('score'))
                         <small class="text-danger"> {{ $errors->first('score') }}</small>
                     @endif
