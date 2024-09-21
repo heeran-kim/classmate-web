@@ -1,4 +1,4 @@
-<x-master title="| {{$assessment->title}}">
+<x-master-layout title="| {{$assessment->title}}">
     <x-course-header :course="$assessment->course">
         @if (Auth::user()->type == 'student')
             <h4>{{$assessment->title}}</h4>
@@ -101,4 +101,4 @@
         {{$students->links()}}
         @endif
     </x-course-header>
-</x-master>
+</x-master-layout>

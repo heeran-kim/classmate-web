@@ -1,4 +1,4 @@
-<x-master title="| Courses">
+<x-master-layout title="| Courses">
     <div class="container">
         <h3 class="ms-1 mb-3">Courses ({{count($courses)}})</h3>
         @if (count($courses))
@@ -24,4 +24,4 @@
             <div class="text-center">No Courses Enrolled Yet</div>
         @endif
     </div>
-</x-master>
+</x-master-layout>
