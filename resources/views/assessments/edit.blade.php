@@ -1,8 +1,13 @@
 <x-master-layout title="| Edit Assessment">
-    <!-- todo: 상위 assessment 의 link 가 유지 되도록 -->
     <x-course-header :course="$course">
-        <h4>Edit Assessment</h4>
+        <a
+            href="{{ route('assessment.show', ['assessment' => $assessment->id]) }}"
+            class="text-decoration-none text-reset"
+        >
+            <h4>{{$assessment->title}}</h4>
+        </a>
         <div class="bg-light p-3 border rounded shadow-sm m-3">
+            <h5 class="text-center m-3">Edit Assessment</h5>
             <form method="POST" action="{{ route('assessment.update', ['assessment' => $assessment->id]) }}" class="row g-3">
                 @csrf
                 @method('PUT')

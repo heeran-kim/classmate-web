@@ -1,7 +1,7 @@
 <x-master-layout title="| Create Assessment">
     <x-course-header :course="$course">
-        <h4>Create Assessment</h4>
         <div class="bg-light p-3 border rounded shadow-sm m-3">
+            <h4 class="text-center m-3">Create Assessment</h4>
             <form method="POST" action="{{ route('assessment.store') }}" class="row g-3">
                 @csrf
                 <div class="col-12">
