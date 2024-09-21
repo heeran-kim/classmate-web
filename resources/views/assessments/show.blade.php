@@ -40,22 +40,20 @@
                     @csrf
                     <div class="row m-2">
                         <div class="col-12 col-sm-6">
-                            <label class="form-label">Reviewee</label>
+                            <x-input-label for="reviewee" :value="__('Reviewee')" />
                             <select name="reviewee" class="form-select">
                                 @foreach ($potentialReviewees as $potentialReviewee)
                                 <option value="{{$potentialReviewee->id}}" {{old('reviewee') == $potentialReviewee->id ? 'selected' : ''}}>{{$potentialReviewee->snumber}} {{$potentialReviewee->name}}</option>
                                 @endforeach
                             </select>
-                            @if ($errors->has('reviewee'))
-                            <small class="text-danger">{{ $errors->first('reviewee') }}</small>
-                            @endif
+                            <x-input-error :messages="$errors->get('reviewee')" class="mt-2" />
                         </div>
                         <div class="col-12 col-sm-6">
+                            <!-- todo: label 변경 -->
                             <label class="form-label">Review</label>
                             <input type="text" class="form-control" name="text" value="{{old('text')}}"></input>
-                            @if ($errors->has('text'))
-                            <small class="text-danger">{{ $errors->first('text') }}</small>
-                            @endif
+                            <x-input-error :messages="$errors->get('text')" class="mt-2" />
+
                         </div>
                     </div>
                     <button type="submit" class="btn btn-primary mx-3">Submit</button>

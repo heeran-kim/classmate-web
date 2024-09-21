@@ -128,7 +128,7 @@ class AssessmentController extends Controller
     public function assignScore(Request $request, Assessment $assessment, User $student)
     {
         $request->validate([
-            'score' => 'required|integer|max:'.$assessment->max_score
+            'score' => 'required|integer|min:0|max:'.$assessment->max_score
         ]);
         $assessment->students()->updateExistingPivot($student->id, ['score' => $request->score]);
         return back();

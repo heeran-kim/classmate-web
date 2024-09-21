@@ -6,7 +6,7 @@
                 @csrf
                 <div class="col-12">
                     <x-input-label for="title" :value="__('Title')" />
-                    <x-text-input id="title" class="d-block mt-1 w-100" type="text" name="title" :value="old('title')" required autofocus />
+                    <x-text-input id="title" class="d-block mt-1 w-100" name="title" :value="old('title')" autofocus />
                     <x-input-error :messages="$errors->get('title')" class="mt-2" />
                 </div>
                 <div class="col-12">
@@ -15,18 +15,18 @@
                     <x-input-error :messages="$errors->get('instruction')" class="mt-2" />
                 </div>
                 <div class="col-12 col-md-6">
-                    <x-input-label for="title" :value="__('The number of reviews required')" />
-                    <x-text-input id="num_required_reviews" class="d-block mt-1 w-100" type="number" name="num_required_reviews" :value="old('num_required_reviews')" required />
+                    <x-input-label for="num_required_reviews" :value="__('The number of reviews required')" />
+                    <x-text-input id="num_required_reviews" class="d-block mt-1 w-100" name="num_required_reviews" :value="old('num_required_reviews')" />
                     <x-input-error :messages="$errors->get('num_required_reviews')" class="mt-2" />
                 </div>
                 <div class="col-12 col-md-6">
                     <x-input-label for="max_score" :value="__('Maximum Score')" />
-                    <x-text-input id="max_score" class="d-block mt-1 w-100" type="number" name="max_score" :value="old('max_score')" required />
+                    <x-text-input id="max_score" class="d-block mt-1 w-100" name="max_score" :value="old('max_score')" />
                     <x-input-error :messages="$errors->get('max_score')" class="mt-2" />
                 </div>
                 <div class="col-12 col-md-6">
                     <x-input-label for="due_date" :value="__('Due Date')" />
-                    <x-text-input id="due_date" class="d-block mt-1 w-100" type="datetime-local" name="due_date" :value="old('due_date')" required />
+                    <x-text-input id="due_date" class="d-block mt-1 w-100" type="datetime-local" name="due_date" :value="old('due_date')" />
                     <x-input-error :messages="$errors->get('due_date')" class="mt-2" />
                 </div>
                 <div class="col-12 col-md-6">
