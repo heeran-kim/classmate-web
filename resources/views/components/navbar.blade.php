@@ -12,7 +12,10 @@
     
             <div class="d-flex algin-items-center">
                 @auth
-                    <div class="d-flex align-items-center me-2">{{Auth::user()->type}} {{Auth::user()->name}}</div>
+                    <div class="row text-end me-2">
+                        <div class="fw-bold text-uppercase">{{ Auth::user()->type }}</div>
+                        <div class=>{{ Auth::user()->name }}</div>
+                    </div>
                     <form method="POST" action="{{route('logout')}}">
                         @csrf
                         <button type="submit" class="btn btn-outline-primary">Logout</button>
