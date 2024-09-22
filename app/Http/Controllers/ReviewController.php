@@ -18,7 +18,7 @@ class ReviewController extends Controller
     public function store(Request $request, Assessment $assessment)
     {
         $reviewer = Auth::user();
-        $reviewedStudentIds = $reviewer->reviews()->pluck('reviewee_id');
+        $reviewedStudentIds = $reviewer->reviewsSubmitted()->pluck('reviewee_id');
 
         $request->validate([
             'review'    => 'required|regex:/^\s*\S+(?:\s+\S+){4,}\s*$/',
@@ -29,7 +29,7 @@ class ReviewController extends Controller
             'reviewee.not_in' => 'This reviewee has already been reviewed.',
         ]);
 
-        $review  = Review::create([
+        $review  = new Review([
             'text'          => $request->review,
             'reviewee_id'   => $request->reviewee,
         ]);
@@ -52,6 +52,6 @@ class ReviewController extends Controller
         $reviewsReceived = $student->reviewsReceivedForAssessment($assessment->id)->get();
         $score = $assessment->students()->where('student_id', $student->id)->first()->pivot->score;
         
-        return view("reviews.student", compact('assessment', 'student', 'reviewsSubmitted', 'reviewsReceived', 'score');
+        return view("reviews.student", compact('assessment', 'student', 'reviewsSubmitted', 'reviewsReceived', 'score'));
     }
 }
