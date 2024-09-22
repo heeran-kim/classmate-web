@@ -4,7 +4,7 @@
             <h4 class="text-center m-3">Create Assessment</h4>
             <form method="POST" action="{{ route('assessment.store') }}" class="row g-3">
                 @csrf
-                <input type="hidden" name="courseId" value="{{$course->id}}">
+                <input type="hidden" name="course_id" value="{{$course->id}}">
                 <div class="col-12">
                     <x-input-label for="title" :value="__('Title')" />
                     <x-text-input id="title" class="d-block mt-1 w-100" name="title" :value="old('title')" autofocus />
