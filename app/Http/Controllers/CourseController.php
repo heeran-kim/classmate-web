@@ -2,13 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Http\Request;
-use Illuminate\Support\Str;
+use DateTime;
 use App\Models\User;
 use App\Models\Course;
 use App\Models\Assessment;
+use Illuminate\Support\Str;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 
 class CourseController extends Controller
 {
@@ -54,7 +55,7 @@ class CourseController extends Controller
         $course = Course::create([
             'code' => $data['code'],
             'name' => $data['name'],
-            'image' => $imageStore ?? 'course_images/default.png',
+            'image' => $imageStore,
         ]);
 
         // assessments
@@ -82,11 +83,11 @@ class CourseController extends Controller
             $student = User::firstOrCreate(
                 ['snumber' => $studentNum],
                 [
-                    'name' => $studentNum,
-                    'snumber' => $studentNum,
-                    'password' => Hash::make($studentNum),
-                    'type' => 'student',
-                    'remember_token' => Str::random(10),
+                    'name'              => $studentNum,
+                    'snumber'           => $studentNum,
+                    'password'          => Hash::make($studentNum),
+                    'type'              => 'student',
+                    'remember_token'    => Str::random(10),
                 ]
             );
 
@@ -105,15 +106,17 @@ class CourseController extends Controller
      */
     public function show(Course $course)
     {
-        // TODO: $teachers, $assessments 필요?
         $teachers = $course->teachers;
         $assessments = $course->assessments()
                         ->with(['students' => function ($query) {
                             $query->where('users.id', Auth::id());
                         }])->get();
-        return view('courses.show')->with('teachers', $teachers)->with('assessments', $assessments)->with('course', $course);
+        return view('courses.show', compact('teachers', 'assessments', 'course'));
     }
 
+    /**
+     * Show the form to enroll students.
+     */
     public function enrollPage(Course $course)
     {
         $enrolledStudentIds = $course->students->pluck('id');
@@ -122,9 +125,12 @@ class CourseController extends Controller
                                 ->orderBy('snumber')
                                 ->get();
     
-        return view('courses.enroll')->with('students', $unenrolledStudents)->with('course', $course);
+        return view('courses.enroll', compact('unenrolledStudents', 'course'));
     }
 
+    /**
+     * Enroll students into the course.
+     */
     public function enroll(Request $request, Course $course)
     {
         $request->validate([
@@ -132,15 +138,17 @@ class CourseController extends Controller
             'students.*' => 'exists:users,id',
         ]);
         
+        $studentIds = $request->students;
+        
+        $course->users()->attach($studentIds);
+        
         $assessments = $course->assessments;
-        foreach ($request->students as $student)
-        {
-            $course->users()->attach($student);
+        foreach ($studentIds as $student) {
             foreach ($assessments as $assessment) {
                 $assessment->students()->attach($student);
             }
         }
 
-        return redirect("course/$course->id/enroll");
+        return redirect()->route('course.enrollPage', $course->id);
     }
 }

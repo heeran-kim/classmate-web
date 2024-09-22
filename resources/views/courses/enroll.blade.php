@@ -5,7 +5,7 @@
             <form method="POST" action="{{ route('course.enroll', ['course' => $course->id]) }}">
                 @csrf
                 <ul class="list-group" style="max-height: 300px; overflow-y: auto;">
-                    @foreach ($students as $student)
+                    @foreach ($unenrolledStudents as $student)
                         <li class="list-group-item">
                             <input class="form-check-input me-1" type="checkbox" value="{{$student->id}}" name="students[]"
                             {{ is_array(old('student')) && in_array($student->id, old('student')) ? 'checked' : '' }}>
