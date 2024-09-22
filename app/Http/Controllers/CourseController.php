@@ -124,7 +124,7 @@ class CourseController extends Controller
         $enrolledStudentIds = $course->students->pluck('id');
         $unenrolledStudents = User::where('type', 'student')
                                 ->whereNotIn('id', $enrolledStudentIds)
-                                ->orderBy('name')
+                                ->orderBy('snumber')
                                 ->get();
     
         return view('courses.enroll')->with('students', $unenrolledStudents)->with('course', $course);
