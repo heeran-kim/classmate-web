@@ -2,13 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 use App\Models\Course;
 use App\Models\Assessment;
-use Illuminate\Http\Request;
 use DateTime;
-use App\Models\AssessmentStudent;
-use Illuminate\Support\Facades\Auth;
 
 class AssessmentController extends Controller
 {
@@ -17,8 +16,8 @@ class AssessmentController extends Controller
      */
     public function create(Request $request)
     {
-        $course = Course::findOrFail($request->input('courseId'));
-        return view('assessments.create')->with('course', $course);
+        $course = Course::findOrFail($request->courseId);
+        return view('assessments.create', compact('course'));
     }
 
     /**
@@ -30,27 +29,25 @@ class AssessmentController extends Controller
             'title'                 => 'required|max:20',
             'num_required_reviews'  => 'required|integer|min:1',
             'max_score'             => 'required|integer|min:1|max:100',
-            'due_date'              => 'required',
+            'due_date'              => 'required|date',
             'type'                  => 'required|in:student-select,teacher-assign',
-            'courseId'              => 'exists:courses,id'
+            'course_id'             => 'exists:courses,id'
         ]);
         
-        $assessment = new Assessment();
-        $assessment->course_id              = $request->courseId;
-        $assessment->title                  = $request->title;
-        $assessment->instruction            = $request->instruction;
-        $assessment->num_required_reviews   = $request->num_required_reviews;
-        $assessment->max_score              = $request->max_score;
-        $assessment->due_date               = new DateTime($request->due_date);
-        $assessment->type                   = $request->type;
-        $assessment->save();
+        $assessment = Assessment::create([
+            'title'                 => $request->title,
+            'instruction'           => $request->instruction,
+            'num_required_reviews'  => $request->num_required_reviews,
+            'max_score'             => $request->max_score,
+            'due_date'              => new DateTime($request->due_date),
+            'type'                  => $request->type,
+            'course_id'             => $request->course_id,
+        ]);
 
-        $students = Course::FindOrFail($request->courseId)->students;
-        foreach ($students as $student) {
-            $assessment->students()->attach($student->id);
-        }
+        $students = $assessment->course->students->pluck('id');
+        $assessment->students()->attach($students);
 
-        return redirect("assessment/$assessment->id");
+        return redirect()->route('assessment.show', $assessment);
     }
 
     /**
@@ -58,39 +55,32 @@ class AssessmentController extends Controller
      */
     public function show(Assessment $assessment)
     {
-        if (Auth::user()->type == 'student') {
-            $reviewer = Auth::user();
-            $reviewsSubmitted = $assessment->reviews()->where('student_id', $reviewer->id)->get();
-            $reviewsReceived = $assessment->reviews()->where('reviewee_id', $reviewer->id)->get();
-            $reviewedStudentIds = $reviewer->reviews()->pluck('reviewee_id');
+        $user = Auth::user();
+
+        if ($user->type == 'student') {
+            $reviewsSubmitted = $user->reviewsSubmittedForAssessment($assessment->id)->get();
+            $reviewsReceived = $user->reviewsReceivedForAssessment($assessment->id)->get();
+            $reviewedStudentIds = $reviewsSubmitted->pluck('reviewee_id');
+            
             $potentialReviewees = $assessment->students()
-                                    ->where('users.id', '!=', $reviewer->id)
+                                    ->where('users.id', '!=', $user->id)
                                     ->get();
-            return view("assessments.show")
-            ->with('assessment', $assessment)
-            ->with('reviewsSubmitted', $reviewsSubmitted)
-            ->with('reviewsReceived', $reviewsReceived)
-            ->with('potentialReviewees', $potentialReviewees)
-            ->with('reviewedStudentIds', $reviewedStudentIds);
+
+            return view("assessments.show", compact('assessment', 'reviewsSubmitted', 'reviewsReceived', 'potentialReviewees', 'reviewedStudentIds'));
         }
         else {
             $reviewCount = $assessment->reviews()->count();
             $students = $assessment->students()->paginate(10);
-            
             $studentsData = [];
             foreach ($students as $student) {
                 $id = $student->id;
                 $name = $student->name;
-                $received = $assessment->reviews()->where('reviewee_id', $student->id)->count();
-                $submitted = $assessment->reviews()->where('student_id', $student->id)->count();
+                $submitted = $student->reviewsSubmittedForAssessment($assessment->id)->count();
+                $received = $student->reviewsReceivedForAssessment($assessment->id)->count();
                 $score = $student->pivot->score;
-                $studentsData[] = ['id'=>$id, 'name'=>$name, 'received'=>$received, 'submitted'=>$submitted, 'score'=>$score];
+                $studentsData[] = ['id'=>$id, 'name'=>$name, 'submitted'=>$submitted, 'received'=>$received, 'score'=>$score];
             }
-            return view("assessments.show")
-            ->with('assessment', $assessment)
-            ->with('reviewCount', $reviewCount)
-            ->with('students', $students)
-            ->with('studentsData', $studentsData);
+            return view("assessments.show", compact('assessment', 'studentsData', 'reviewCount', 'students'));
         }
     }
 
@@ -123,9 +113,12 @@ class AssessmentController extends Controller
         $assessment->type                   = $request->type;
         $assessment->save();
         
-        return redirect("assessment/$assessment->id");
+        return redirect()->route('assessment.show', $assessment);
     }
 
+    /**
+     * Assign score to a student.
+     */
     public function assignScore(Request $request, Assessment $assessment, User $student)
     {
         $request->validate([

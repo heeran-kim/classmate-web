@@ -53,7 +53,7 @@ class User extends Authenticatable
                     ->orderBy('code');
     }
     
-    function reviews() {
+    function reviewsSubmitted() {
         return $this->hasManyThrough(
             Review::class,              // The final model we want to retrieve.
             AssessmentStudent::class,   // The intermediate model that connects.
@@ -62,6 +62,20 @@ class User extends Authenticatable
             'id',                       // Local key on the current model.
             'id'                        // Local key on the intermediate model that links to the final model.
         );
+    }
+
+    function reviewsSubmittedForAssessment($assessmentId) {
+        return $this->reviewsSubmitted()->where('assessment_id', $assessmentId);
+    }
+
+    function reviewsReceived() {
+        return $this->hasMany(Review::class, 'reviewee_id', 'id');
+    }
+
+    function reviewsReceivedForAssessment($assessmentId) {
+        return $this->reviewsReceived()->whereHas('assessmentStudent', function ($query) use ($assessmentId) {
+            $query->where('assessment_id', $assessmentId);
+        });
     }
 
     function assessments() {

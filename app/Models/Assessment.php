@@ -9,6 +9,21 @@ class Assessment extends Model
 {
     use HasFactory;
 
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array<int, string>
+     */
+    protected $fillable = [
+        'title',
+        'instruction',
+        'num_required_reviews',
+        'max_score',
+        'due_date',
+        'type',
+        'course_id',
+    ];
+
     function course() {
         return $this->belongsTo(Course::class);
     }
