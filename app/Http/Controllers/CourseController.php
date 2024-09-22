@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 use App\Models\User;
 use App\Models\Course;
 use App\Models\Assessment;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Str;
 
 class CourseController extends Controller
 {
@@ -18,9 +18,12 @@ class CourseController extends Controller
     public function index()
     {
         $courses = Auth::user()->courses;
-        return view('courses.index')->with('courses', $courses);
+        return view('courses.index', compact('courses'));
     }
 
+    /**
+     * Show the form for creating a new resource.
+     */
     public function create()
     {
         return view('courses.create');
@@ -32,77 +35,69 @@ class CourseController extends Controller
     public function store(Request $request) 
     {
         $request->validate([
-            'jsonFile' => 'required|file|mimes:json|max:2048', 
+            'jsonFile' => 'required|file|mimes:json', 
         ]);
         
         $file = $request->file('jsonFile');
         $jsonContents = file_get_contents($file->getPathName());
         $data = json_decode($jsonContents, true);
 
-        if (Course::where('code', $data['code'])->count()) {
+        if (Course::where('code', $data['code'])->exists()) {
             return back()->withErrors(['jsonFile' => 'Course code (' . $data['code'] . ') already exist.']);
         }
             
         $imageStore = null;
         if ($request->hasFile('image')) {
-            $imageStore = request()->file('image')->store('images/courses_images', 'public');
+            $imageStore = $request->file('image')->store('courses_images', 'public');
         }
         
-        $course = new Course();
-        $course->code = $data['code'];
-        $course->name = $data['name'];
-        $course->image = $imageStore;
-        $course->save();
+        $course = Course::create([
+            'code' => $data['code'],
+            'name' => $data['name'],
+            'image' => $imageStore ?? 'course_images/default.png',
+        ]);
 
         // assessments
         foreach ($data['assessments'] as $assessmentData) {
-            $assessment = new Assessment();
-            $assessment->course_id              = $course->id;
-            $assessment->title                  = $assessmentData['title'];
-            $assessment->instruction            = $assessmentData['instruction'];
-            $assessment->num_required_reviews   = $assessmentData['num_required_reviews'];
-            $assessment->max_score              = $assessmentData['max_score'];
-            $assessment->due_date               = $assessmentData['due_date'];
-            $assessment->type                   = $assessmentData['type'];
-            $assessment->save();
+            $assessment = Assessment::create([
+                'title'                 => $assessmentData['title'],
+                'instruction'           => $assessmentData['instruction'],
+                'num_required_reviews'  => $assessmentData['num_required_reviews'],
+                'max_score'             => $assessmentData['max_score'],
+                'due_date'              => new DateTime($assessmentData['due_date']),
+                'type'                  => $assessmentData['type'],
+                'course_id'             => $course->id,
+            ]);
         }
         
-        // for teachers
+        // teachers
         foreach ($data['teachers'] as $teacherNum) {
-            $teacherId = User::where('snumber', $teacherNum)->first()->id;
-            $course->users()->attach($teacherId);
+            $teacher = User::where('snumber', $teacherNum)->firstOrFail();
+            $course->users()->attach($teacher->id);
         }
 
-        // for students
+        // students
         $assessments = $course->assessments;
         foreach ($data['students'] as $studentNum) {
-            
-            $student = User::where('snumber', $studentNum)->first();
-            
-            // Check if the student exists
-            if ($student) {
-                $studentId = $student->id;
-            } 
-            else {
-                // If the student doesn't exist, create them
-                // assign a default password as their snumber
-                $newStudent = User::create([
+            $student = User::firstOrCreate(
+                ['snumber' => $studentNum],
+                [
                     'name' => $studentNum,
                     'snumber' => $studentNum,
                     'password' => Hash::make($studentNum),
                     'type' => 'student',
                     'remember_token' => Str::random(10),
-                ]);       
-                $studentId = $newStudent->id;
-            }
+                ]
+            );
 
-            $course->users()->attach($studentId);
+            $course->users()->attach($student->id);
+            
             foreach ($assessments as $assessment) {
-                $assessment->students()->attach($studentId);
+                $assessment->students()->attach($student->id);
             }
         }
         
-        return redirect("course/$course->id");
+        return redirect()->route('course.show', $course->id);
     }
 
     /**

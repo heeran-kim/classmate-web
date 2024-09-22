@@ -9,6 +9,17 @@ class Course extends Model
 {
     use HasFactory;
 
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array<int, string>
+     */
+    protected $fillable = [
+        'code',
+        'name',
+        'image',
+    ];
+
     function assessments() {
         return $this->hasMany(Assessment::class);
     }
