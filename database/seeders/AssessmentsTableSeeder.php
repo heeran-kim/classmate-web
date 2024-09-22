@@ -18,7 +18,7 @@ class AssessmentsTableSeeder extends Seeder
             'num_required_reviews' => 3,
             'max_score' => 30,
             'due_date' => now()->addDays(7), // Due in 7 days
-            'type' => 'peer-review',
+            'type' => 'student-select',
             'course_id' => 1,  // Course 1
             'created_at' => now(),
             'updated_at' => now(),
@@ -30,7 +30,7 @@ class AssessmentsTableSeeder extends Seeder
             'num_required_reviews' => 3,
             'max_score' => 30,
             'due_date' => now()->addDays(14), // Due in 14 days
-            'type' => 'peer-review',
+            'type' => 'student-select',
             'course_id' => 1,  // Course 1
             'created_at' => now(),
             'updated_at' => now(),
@@ -42,7 +42,7 @@ class AssessmentsTableSeeder extends Seeder
             'num_required_reviews' => 3,
             'max_score' => 40,
             'due_date' => now()->addDays(21), // Due in 21 days
-            'type' => 'peer-review',
+            'type' => 'student-select',
             'course_id' => 1,  // Course 1
             'created_at' => now(),
             'updated_at' => now(),
@@ -55,7 +55,7 @@ class AssessmentsTableSeeder extends Seeder
             'num_required_reviews' => 3,
             'max_score' => 50,
             'due_date' => now()->addDays(7), // Due in 7 days
-            'type' => 'peer-review',
+            'type' => 'student-select',
             'course_id' => 2,  // Course 2
             'created_at' => now(),
             'updated_at' => now(),
@@ -67,7 +67,7 @@ class AssessmentsTableSeeder extends Seeder
             'num_required_reviews' => 3,
             'max_score' => 50,
             'due_date' => now()->addDays(14), // Due in 14 days
-            'type' => 'peer-review',
+            'type' => 'student-select',
             'course_id' => 2,  // Course 2
             'created_at' => now(),
             'updated_at' => now(),

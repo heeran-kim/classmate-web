@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use App\Models\AssessmentStudent;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\Rule;
 
 class ReviewController extends Controller
 {
@@ -17,13 +18,20 @@ class ReviewController extends Controller
      */
     public function store(Request $request, Assessment $assessment)
     {
+        $reviewer = Auth::user();
+        $reviewedStudentIds = $reviewer->reviews()->pluck('reviewee_id');
+
         $request->validate([
-            'text'      => 'required|regex:/^\s*\S+(?:\s+\S+){4,}\s*$/',
-            'reviewee'  => 'exists:users,id'
+            'review'    => 'required|regex:/^\s*\S+(?:\s+\S+){4,}\s*$/',
+            'reviewee' => ['required', 'exists:users,id', Rule::notIn($reviewedStudentIds)],
+        ],
+        [
+            'review.regex' => 'The review text must be at least 5 words.',
+            'reviewee.not_in' => 'This reviewee has already been reviewed.',
         ]);
 
         $review                 = new Review();
-        $review->text           = $request->text;
+        $review->text           = $request->review;
         $review->reviewee_id    = $request->reviewee;
         
         $assessmentStudent = AssessmentStudent::where('assessment_id', $assessment->id)

@@ -8,7 +8,7 @@
                     <p><div class="fw-bold">Instructions: </div>{{$assessment->instruction}}</p>
                     <p><span class="fw-bold">The number of reviews required: </span>{{$assessment->num_required_reviews}}</p>
                     <p><span class="fw-bold">Max score: </span>{{$assessment->max_score}}</p>
-                    <p><span class="fw-bold">Due date: </span>{{$assessment->due_date}}</p>
+                    <p><span class="fw-bold">Due date: </span>{{ (new DateTime($assessment->due_date))->format('D j/m/Y, g:i a') }}</p>
                     <p><span class="fw-bold">Type: </span>{{$assessment->type}}</p>
                 </div>
                 <h5>Peer Review Submitted: {{count($reviewsSubmitted)}}/{{$assessment->num_required_reviews}}</h5>
@@ -43,15 +43,17 @@
                             <x-input-label for="reviewee" :value="__('Reviewee')" />
                             <select name="reviewee" class="form-select">
                                 @foreach ($potentialReviewees as $potentialReviewee)
-                                <option value="{{$potentialReviewee->id}}" {{old('reviewee') == $potentialReviewee->id ? 'selected' : ''}}>{{$potentialReviewee->snumber}} {{$potentialReviewee->name}}</option>
+                                <option value="{{$potentialReviewee->id}}" {{old('reviewee') == $potentialReviewee->id ? 'selected' : ''}}>
+                                    {{$potentialReviewee->snumber}} {{$potentialReviewee->name}} {{ $reviewedStudentIds->contains($potentialReviewee->id) ? '(reviewed)' : '' }}
+                                </option>
                                 @endforeach
                             </select>
                             <x-input-error :messages="$errors->get('reviewee')" class="mt-2" />
                         </div>
                         <div class="col-12 col-sm-6">
-                            <x-input-label for="text" :value="__('Review')" />
-                            <x-text-input id="text" class="d-block mt-1 w-100" name="review" :value="old('text')" />
-                            <x-input-error :messages="$errors->get('text')" class="mt-2" />
+                            <x-input-label for="review" :value="__('Review')" />
+                            <x-text-input id="review" class="d-block mt-1 w-100" name="review" :value="old('review')" />
+                            <x-input-error :messages="$errors->get('review')" class="mt-2" />
 
                         </div>
                     </div>

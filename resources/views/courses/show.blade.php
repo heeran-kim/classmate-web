@@ -18,7 +18,7 @@
                     <li class="list-group-item d-flex justify-content-between align-items-center">
                         <div class="ms-2 me-auto">
                             <div class="fw-bold">{{$assessment->title}}</div>
-                            <i class="bi bi-calendar"></i> {{$assessment->due_date}}
+                            <i class="bi bi-calendar"></i> {{ (new DateTime($assessment->due_date))->format('D j/m/Y, g:i a') }}
                         </div>
                         <div>
                             <div class="badge text-bg-primary rounded-pill">

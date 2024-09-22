@@ -6,6 +6,7 @@ use App\Models\User;
 use App\Models\Course;
 use App\Models\Assessment;
 use Illuminate\Http\Request;
+use DateTime;
 use App\Models\AssessmentStudent;
 use Illuminate\Support\Facades\Auth;
 
@@ -40,10 +41,10 @@ class AssessmentController extends Controller
         $assessment->instruction            = $request->instruction;
         $assessment->num_required_reviews   = $request->num_required_reviews;
         $assessment->max_score              = $request->max_score;
-        $assessment->due_date               = $request->due_date;
+        $assessment->due_date               = new DateTime($request->due_date);
         $assessment->type                   = $request->type;
         $assessment->save();
-        
+
         $students = Course::FindOrFail($request->courseId)->students;
         foreach ($students as $student) {
             $assessment->students()->attach($student->id);
@@ -63,14 +64,14 @@ class AssessmentController extends Controller
             $reviewsReceived = $assessment->reviews()->where('reviewee_id', $reviewer->id)->get();
             $reviewedStudentIds = $reviewer->reviews()->pluck('reviewee_id');
             $potentialReviewees = $assessment->students()
-                                    ->whereNotIn('users.id', $reviewedStudentIds)
                                     ->where('users.id', '!=', $reviewer->id)
                                     ->get();
             return view("assessments.show")
             ->with('assessment', $assessment)
             ->with('reviewsSubmitted', $reviewsSubmitted)
             ->with('reviewsReceived', $reviewsReceived)
-            ->with('potentialReviewees', $potentialReviewees);
+            ->with('potentialReviewees', $potentialReviewees)
+            ->with('reviewedStudentIds', $reviewedStudentIds);
         }
         else {
             $reviewCount = $assessment->reviews()->count();
