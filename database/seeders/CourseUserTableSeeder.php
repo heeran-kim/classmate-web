@@ -15,35 +15,33 @@ class CourseUserTableSeeder extends Seeder
     {
         // Enroll teachers
         $numTeachers = User::where('type', 'teacher')->count();
-        $teachers = range(0, $numTeachers - 1);
+        $teachersIds = range(0, $numTeachers - 1);
 
         $courses = Course::all();
         foreach ($courses as $course) {
-            $randomUsers = array_rand($teachers, 3);
+            $randomUsersIds = array_rand($teachersIds, 3);
             
-            foreach ($randomUsers as $randomUserIndex) {
-                $userId = User::findOrFail($randomUserIndex)->first()->id;
+            foreach ($randomUsersIds as $randomIndex) {
                 DB::table('course_user')->insert([
                     'course_id' => $course->id,
-                    'user_id' => $userId,
+                    'user_id' => $teachersIds[$randomIndex],
                 ]);
             }
         }
 
         // Enroll students
         $numUsers = User::all()->count();
-        $students = range($numTeachers, $numUsers - 1);
+        $studentsIds = range($numTeachers, $numUsers - 1);
 
         $courses = Course::all();
         foreach ($courses as $course) {
             $numStudentsToEnroll = rand(15, 45);
-            $randomUsers = array_rand($students, $numStudentsToEnroll);
+            $randomUsersIds = array_rand($studentsIds, $numStudentsToEnroll);
             
-            foreach ($randomUsers as $randomUserIndex) {
-                $userId = User::findOrFail($randomUserIndex)->first()->id;
+            foreach ($randomUsersIds as $randomIndex) {
                 DB::table('course_user')->insert([
                     'course_id' => $course->id,
-                    'user_id' => $userId,
+                    'user_id' => $studentsIds[$randomIndex],
                 ]);
             }
         }
