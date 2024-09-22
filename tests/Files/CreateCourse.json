@@ -1,0 +1,23 @@
+{
+    "name": "Software Technologies",
+    "code" : "7810ICT",
+    "teachers": [
+        "S1001", "S1003"
+    ],
+    "assessments": [
+        {
+            "title" : "Assessment 1",
+            "instruction" : "Instructions for Assessment 1",
+            "num_required_reviews" : 5,
+            "max_score" : 100,
+            "due_date" : "2024-09-30 23:59:59",
+            "type" : "student-assign"
+        }
+    ],
+    "students": [
+        "S0102",
+        "S0103",
+        "S0001",
+        "S0002"
+    ]
+}
