@@ -16,8 +16,8 @@ class UsersTableSeeder extends Seeder
     {
         $faker = Faker::create(); // Create a Faker instance
 
-        // Seed 4 teachers
-        for ($i = 0; $i < 4; $i++) {
+        // Seed 5 teachers
+        for ($i = 0; $i < 5; $i++) {
             DB::table('users')->insert([
                 'name' => $faker->name,  // Use Faker to generate random name
                 'email' => $faker->unique()->safeEmail,  // Use Faker to generate random unique email
@@ -30,7 +30,7 @@ class UsersTableSeeder extends Seeder
             ]);
         }
 
-        // Seed 10 students
+        // Seed 50 students
         for ($i = 0; $i < 50; $i++) {
             DB::table('users')->insert([
                 'name' => $faker->name,  // Use Faker to generate random name

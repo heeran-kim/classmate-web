@@ -3,7 +3,7 @@
         <div class="bg-light p-3 border rounded shadow-sm m-3">
 
             <h5 class="text-center m-3">Create Course</h5>
-            <form method="POST" action="{{ route('course.store') }}" enctype ="multipart/form data">
+            <form method="POST" action="{{ route('course.store') }}" enctype ="multipart/form-data">
                 @csrf
                 <x-input-label for="jsonFile" class="mt-2" :value="__('Input Course File:')"  />
                 <input type="file" class="form-control" name="jsonFile">
