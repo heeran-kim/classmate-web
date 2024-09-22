@@ -87,7 +87,7 @@
                             <div class="fw-bold">{{$studentData['name']}}</div>
                             Submitted: {{$studentData['submitted']}} Received: {{$studentData['received']}}
                         </div>
-                        <div class="badge rounded-pill {{$studentData['score'] ? 'text-bg-secondary' : 'text-bg-primary'}}">
+                        <div class="badge rounded-pill {{is_null($studentData['score']) ? 'text-bg-primary' : 'text-bg-secondary'}}">
                             {{$studentData['score'] ?? 0}} / {{$assessment->max_score}}
                         </div>
                     </li>
