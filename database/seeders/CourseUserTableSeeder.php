@@ -1,8 +1,10 @@
 <?php
 
 namespace Database\Seeders;
-use Illuminate\Support\Facades\DB;
+use App\Models\User;
+use App\Models\Course;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 
 class CourseUserTableSeeder extends Seeder
 {
@@ -12,44 +14,38 @@ class CourseUserTableSeeder extends Seeder
     public function run(): void
     {
         // Enroll teachers
-        // Teachers 1, 2, 3 for Course 1
-        for ($i = 1; $i <= 3; $i++) {
-            DB::table('course_user')->insert([
-                'course_id' => 1,
-                'user_id' => $i,  // Teachers 1, 2, 3 for Course 1
-                'created_at' => now(),
-                'updated_at' => now(),
-            ]);
+        $numTeachers = User::where('type', 'teacher')->count();
+        $teachers = range(0, $numTeachers - 1);
+
+        $courses = Course::all();
+        foreach ($courses as $course) {
+            $randomUsers = array_rand($teachers, 3);
+            
+            foreach ($randomUsers as $randomUserIndex) {
+                $userId = User::findOrFail($randomUserIndex)->first()->id;
+                DB::table('course_user')->insert([
+                    'course_id' => $course->id,
+                    'user_id' => $userId,
+                ]);
+            }
         }
 
-        // Teachers 2, 3, 4 for Course 2
-        for ($i = 2; $i <= 4; $i++) {
-            DB::table('course_user')->insert([
-                'course_id' => 2,
-                'user_id' => $i,  // Teachers 2, 3, 4 for Course 2
-                'created_at' => now(),
-                'updated_at' => now(),
-            ]);
-        }
+        // Enroll students
+        $numUsers = User::all()->count();
+        $students = range($numTeachers, $numUsers - 1);
 
-        // Enroll the first 8 students (IDs 5 to 12) in Course 1
-        for ($i = 5; $i <= 47; $i++) {
-            DB::table('course_user')->insert([
-                'course_id' => 1,
-                'user_id' => $i,  // Students 5 to 12 for Course 1
-                'created_at' => now(),
-                'updated_at' => now(),
-            ]);
-        }
-
-        // Enroll the last 8 students (IDs 7 to 14) in Course 2
-        for ($i = 7; $i <= 14; $i++) {
-            DB::table('course_user')->insert([
-                'course_id' => 2,
-                'user_id' => $i,  // Students 7 to 14 for Course 2
-                'created_at' => now(),
-                'updated_at' => now(),
-            ]);
+        $courses = Course::all();
+        foreach ($courses as $course) {
+            $numStudentsToEnroll = rand(15, 45);
+            $randomUsers = array_rand($students, $numStudentsToEnroll);
+            
+            foreach ($randomUsers as $randomUserIndex) {
+                $userId = User::findOrFail($randomUserIndex)->first()->id;
+                DB::table('course_user')->insert([
+                    'course_id' => $course->id,
+                    'user_id' => $userId,
+                ]);
+            }
         }
     }
 }

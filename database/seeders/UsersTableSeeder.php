@@ -25,8 +25,6 @@ class UsersTableSeeder extends Seeder
                 'snumber' => 'S1' . str_pad($i, 3, '0', STR_PAD_LEFT), // S1000, S1001, etc.
                 'password' => Hash::make('password'),
                 'remember_token' => Str::random(10),
-                'created_at' => now(),
-                'updated_at' => now(),
             ]);
         }
 
@@ -39,8 +37,6 @@ class UsersTableSeeder extends Seeder
                 'snumber' => 'S0' . str_pad($i, 3, '0', STR_PAD_LEFT), // S0000, S0001, etc.
                 'password' => Hash::make('password'),
                 'remember_token' => Str::random(10),
-                'created_at' => now(),
-                'updated_at' => now(),
             ]);
         }
     }
