@@ -9,6 +9,16 @@ class Review extends Model
 {
     use HasFactory;
 
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array<int, string>
+     */
+    protected $fillable = [
+        'text',
+        'reviewee_id',
+    ];
+
     function assessmentStudent()
     {
         return $this->belongsTo(AssessmentStudent::class);

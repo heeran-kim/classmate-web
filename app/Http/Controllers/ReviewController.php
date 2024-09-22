@@ -2,14 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 use App\Models\Review;
 use App\Models\Assessment;
-use Illuminate\Http\Request;
 use App\Models\AssessmentStudent;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Validation\Rule;
 
 class ReviewController extends Controller
 {
@@ -30,34 +29,29 @@ class ReviewController extends Controller
             'reviewee.not_in' => 'This reviewee has already been reviewed.',
         ]);
 
-        $review                 = new Review();
-        $review->text           = $request->review;
-        $review->reviewee_id    = $request->reviewee;
-        
+        $review  = Review::create([
+            'text'          => $request->review,
+            'reviewee_id'   => $request->reviewee,
+        ]);
+
         $assessmentStudent = AssessmentStudent::where('assessment_id', $assessment->id)
-                            ->where('student_id', Auth::user()->id)
+                            ->where('student_id', $reviewer->id)
                             ->firstOrFail();
         
         $review->assessment_student_id = $assessmentStudent->id;
-        
         $review->save();
 
-        return redirect("assessment/$assessment->id");
+        return redirect()->route('assessment.show', $assessment);
     }
 
     /**
      * Display the specified resource.
      */
     public function showStudentReviews(Assessment $assessment, User $student){
-        $reviewsSubmitted = $assessment->reviews()->where('student_id', $student->id)->get();
-        $reviewsReceived = $assessment->reviews()->where('reviewee_id', $student->id)->get();
+        $reviewsSubmitted = $student->reviewsSubmittedForAssessment($assessment->id)->get();
+        $reviewsReceived = $student->reviewsReceivedForAssessment($assessment->id)->get();
         $score = $assessment->students()->where('student_id', $student->id)->first()->pivot->score;
         
-        return view("reviews.student")
-        ->with('assessment', $assessment)
-        ->with('student', $student)
-        ->with('reviewsSubmitted', $reviewsSubmitted)
-        ->with('reviewsReceived', $reviewsReceived)
-        ->with('score', $score);
+        return view("reviews.student", compact('assessment', 'student', 'reviewsSubmitted', 'reviewsReceived', 'score');
     }
 }

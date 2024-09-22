@@ -98,7 +98,7 @@ class CourseController extends Controller
             }
         }
         
-        return redirect()->route('course.show', $course->id);
+        return redirect()->route('course.show', $course);
     }
 
     /**
@@ -149,6 +149,6 @@ class CourseController extends Controller
             }
         }
 
-        return redirect()->route('course.enrollPage', $course->id);
+        return redirect()->route('course.enrollPage', $course);
     }
 }
