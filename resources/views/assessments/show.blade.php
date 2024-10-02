@@ -41,7 +41,7 @@
                     <div class="row m-2">
                         <div class="col-12 col-sm-6">
                             <x-input-label for="reviewee" :value="__('Reviewee')" />
-                            <select name="reviewee" class="form-select">
+                            <select name="reviewee" class="form-select d-block mt-1 w-100 shadow-sm">
                                 @foreach ($potentialReviewees as $potentialReviewee)
                                 <option value="{{$potentialReviewee->id}}" {{old('reviewee') == $potentialReviewee->id ? 'selected' : ''}}>
                                     {{$potentialReviewee->snumber}} {{$potentialReviewee->name}} {{ $reviewedStudentIds->contains($potentialReviewee->id) ? '(reviewed)' : '' }}
