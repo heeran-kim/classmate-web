@@ -109,7 +109,7 @@ class CourseController extends Controller
 
         // Create assessments for the course based on the provided data
         foreach ($data['assessments'] as $assessmentData) {
-            $assessment = Assessment::create([
+            Assessment::create([
                 'title'                 => $assessmentData['title'],
                 'instruction'           => $assessmentData['instruction'],
                 'num_required_reviews'  => $assessmentData['num_required_reviews'],
@@ -130,7 +130,6 @@ class CourseController extends Controller
         $studentIds = [];
 
         // Create students or retrieve existing ones
-        $assessments = $course->assessments;
         foreach ($data['students'] as $studentNum) {
             $student = User::firstOrCreate(
                 ['snumber' => $studentNum],
