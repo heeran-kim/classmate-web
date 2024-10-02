@@ -1,12 +1,14 @@
 <?php
 
-use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CourseController;
-use App\Http\Controllers\AssessmentController;
 use App\Http\Controllers\ReviewController;
 use App\Http\Middleware\StudentMiddleware;
 use App\Http\Middleware\TeacherMiddleware;
+use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\AssessmentController;
+use App\Http\Controllers\Auth\PasswordController;
+use App\Http\Middleware\EnsureProfileComplete;
 
 Route::middleware(['auth', TeacherMiddleware::class])->group(function () {
     Route::resource('assessment', AssessmentController::class)->only(['create', 'store', 'edit', 'update']);
@@ -17,15 +19,21 @@ Route::middleware(['auth', TeacherMiddleware::class])->group(function () {
     Route::post('course/{course}/enroll', [CourseController::class, 'enroll'])->name('course.enroll');
 });
 
-Route::middleware('auth')->group(function () {
+Route::middleware(['auth', StudentMiddleware::class])->group(function () {
+    Route::resource('assessment.review', ReviewController::class)->only(['store']);
+});
+
+Route::middleware(['auth', EnsureProfileComplete::class])->group(function () {
     Route::get('/', [CourseController::class, 'index'])->name('dashboard');
     Route::resource('course', CourseController::class)->only(['index', 'show']);
     Route::resource('assessment', AssessmentController::class)->only(['show']);
 });
 
-Route::middleware(['auth', StudentMiddleware::class])->group(function () {
-    Route::resource('assessment.review', ReviewController::class)->only(['store']);
+Route::middleware('auth')->group(function () {
+    Route::get('profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::put('profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    Route::put('profile/password', [PasswordController::class, 'update'])->name('password.update');
 });
-
 
 require __DIR__.'/auth.php';

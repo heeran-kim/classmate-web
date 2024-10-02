@@ -13,15 +13,15 @@ return new class extends Migration
     {
         Schema::create('assessments', function (Blueprint $table) {
             $table->id();
-            $table->string('title');
+            $table->string('title', 20);
             $table->text('instruction');
-            $table->integer('num_required_reviews');
-            $table->integer('max_score');
+            $table->unsignedInteger('num_required_reviews');
+            $table->unsignedInteger('max_score');
             $table->dateTime('due_date');
-            $table->string('type');
+            $table->enum('type', ['student-select', 'teacher-assign']);
 
             $table->unsignedBigInteger('course_id');
-            $table->foreign('course_id')->references('id')->on('courses');
+            $table->foreign('course_id')->references('id')->on('courses')->onDelete('cascade');
 
             $table->timestamps();
         });

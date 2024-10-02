@@ -16,6 +16,7 @@
                         <div class="fw-bold text-uppercase">{{ Auth::user()->type }}</div>
                         <div class=>{{ Auth::user()->name }}</div>
                     </div>
+                    <a href="{{route('profile.edit')}}"><button type="button" class="btn btn-outline-primary me-2">Edit</button></a>
                     <form method="POST" action="{{route('logout')}}">
                         @csrf
                         <button type="submit" class="btn btn-outline-primary">Logout</button>

@@ -8,13 +8,15 @@ use App\Models\Course;
 use App\Models\Assessment;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Validator;
 
 class CourseController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Display a listing of the course.
      */
     public function index()
     {
@@ -23,42 +25,78 @@ class CourseController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Show the form for creating a new course.
      */
     public function create()
     {
         return view('courses.create');
     }
 
+    private function validateCourseData(array $data)
+    {
+        Validator::make($data, [
+            // Course validation
+            'code'                                  => 'required|regex:/^\d{4}[A-Z]{3}$|unique:courses,code',
+            'name'                                  => 'required|string|max:100',
+            
+            // Assessments validation
+            'assessments'                           => 'array',
+            'assessments.*.title'                   => 'required|string|max:255',
+            'assessments.*.num_required_reviews'    => 'required|integer|min:1',
+            'assessments.*.max_score'               => 'required|integer|min:1|max:100',
+            'assessments.*.due_date'                => 'required|date',
+            'assessments.*.type'                    => 'required|in:student-select,teacher-assign',
+            
+            // Teachers validation
+            'teachers'                              => 'required|array|min:1',
+            'teachers.*'                            => ['required', 'exists:users,snumber', 
+                                                            Rule::exists('users', 'type')->where(function ($query) {
+                                                                $query->where('type', 'teacher');
+                                                            }),
+                                                        ],
+
+            // Students validation
+            'students'                              => 'array',
+            'students.*.snumber'                    => 'required|regex:/^S\d{4}$/',
+        ], [
+            'code.regex'                => 'The course code must be 4 digits followed by 3 uppercase letters.',
+            'assessments.*.type.in'     => 'Assessment type must be either student-select or teacher-assign.',
+            'students.*.snumber.regex'  => 'The student number must follow the format "S####".',
+        ])->validate();
+    }
+
     /**
-     * Store a newly created resource in storage.
+     * Store a newly created course in storage.
      */
     public function store(Request $request) 
     {
+        // Validate the uploaded JSON file
         $request->validate([
             'jsonFile' => 'required|file|mimes:json', 
         ]);
         
+        // Read and decode the contents of the JSON file
         $file = $request->file('jsonFile');
         $jsonContents = file_get_contents($file->getPathName());
         $data = json_decode($jsonContents, true);
 
-        if (Course::where('code', $data['code'])->exists()) {
-            return back()->withErrors(['jsonFile' => 'Course code (' . $data['code'] . ') already exist.']);
-        }
+        // Validate the data extracted from the JSON file (e.g., course, assessments, teachers, students)
+        $this->validateCourseData($data);
             
         $imageStore = null;
+        // Check if an image file is uploaded and store it
         if ($request->hasFile('image')) {
             $imageStore = $request->file('image')->store('courses_images', 'public');
         }
         
+        // Create a new course using the validated data
         $course = Course::create([
-            'code' => $data['code'],
-            'name' => $data['name'],
+            'code'  => $data['code'],
+            'name'  => $data['name'],
             'image' => $imageStore,
         ]);
 
-        // assessments
+        // Create assessments for the course based on the provided data
         foreach ($data['assessments'] as $assessmentData) {
             $assessment = Assessment::create([
                 'title'                 => $assessmentData['title'],
@@ -71,13 +109,13 @@ class CourseController extends Controller
             ]);
         }
         
-        // teachers
+        // Attach teachers to the course using their staff number (snumber)
         foreach ($data['teachers'] as $teacherNum) {
             $teacher = User::where('snumber', $teacherNum)->firstOrFail();
             $course->users()->attach($teacher->id);
         }
 
-        // students
+        // Attach students to the course, creating new users if they don't exist
         $assessments = $course->assessments;
         foreach ($data['students'] as $studentNum) {
             $student = User::firstOrCreate(
@@ -85,12 +123,13 @@ class CourseController extends Controller
                 [
                     'name'              => $studentNum,
                     'snumber'           => $studentNum,
-                    'password'          => Hash::make($studentNum),
+                    'password'          => Hash::make($studentNum), // Default password is the student's snumber
                     'type'              => 'student',
                     'remember_token'    => Str::random(10),
                 ]
             );
 
+            // Attach the student to the course and all course assessments
             $course->users()->attach($student->id);
             
             foreach ($assessments as $assessment) {
@@ -98,6 +137,7 @@ class CourseController extends Controller
             }
         }
         
+        // Redirect to the course details page after creation
         return redirect()->route('course.show', $course);
     }
 

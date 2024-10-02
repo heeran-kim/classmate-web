@@ -32,6 +32,8 @@ class AssessmentController extends Controller
             'due_date'              => 'required|date',
             'type'                  => 'required|in:student-select,teacher-assign',
             'course_id'             => 'exists:courses,id'
+        ], [
+            'type.in' => 'Assessment type must be either student-select or teacher-assign.'
         ]);
         
         $assessment = Assessment::create([

@@ -30,18 +30,25 @@ class RegisteredUserController extends Controller
     public function store(Request $request): RedirectResponse
     {
         $request->validate([
-            'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'lowercase', 'email', 'max:255'],
-            'snumber' => ['required', 'regex:/^S\d{4}$/', 'unique:'.User::class],
-            'password' => ['required', 'confirmed', Rules\Password::defaults()],
+            'name'      => 'required|string|max:255',
+            'email'     => 'required|string|lowercase|email|max:255',
+            'snumber'   => 'required|regex:/^S\d{4}$/|unique:users,snumber',
+            'password'  => ['required', 'confirmed',
+                                Rules\Password::defaults(),
+                                function ($attribute, $value, $fail) use ($request) {
+                                    if ($value === $request->snumber) {
+                                        $fail('The password cannot be the same as the student number.');
+                                    }
+                                },
+                            ],
         ]);
 
         $user = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'snumber' => $request->snumber,
-            'password' => Hash::make($request->string('password')),
-            'type' => 'student',
+            'name'      => $request->name,
+            'email'     => $request->email,
+            'snumber'   => $request->snumber,
+            'password'  => Hash::make($request->string('password')),
+            'type'      => 'student',
         ]);
 
         event(new Registered($user));
