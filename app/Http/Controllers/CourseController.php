@@ -40,7 +40,7 @@ class CourseController extends Controller
             'name'                                  => 'required|string|max:100',
             
             // Assessments validation
-            'assessments'                           => 'array',
+            'assessments'                           => 'required|array|min:1',
             'assessments.*.title'                   => 'required|string|max:20',
             'assessments.*.num_required_reviews'    => 'required|integer|min:1',
             'assessments.*.max_score'               => 'required|integer|min:1|max:100',
