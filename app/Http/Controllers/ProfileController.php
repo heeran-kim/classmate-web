@@ -28,7 +28,7 @@ class ProfileController extends Controller
 
         $request->user()->save();
 
-        return back();
+        return redirect()->back();
     }
 
     /**

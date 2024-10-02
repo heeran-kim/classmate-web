@@ -127,6 +127,6 @@ class AssessmentController extends Controller
             'score' => 'required|integer|min:0|max:'.$assessment->max_score
         ]);
         $assessment->students()->updateExistingPivot($student->id, ['score' => $request->score]);
-        return back();
+        return redirect()->back();
     }
 }

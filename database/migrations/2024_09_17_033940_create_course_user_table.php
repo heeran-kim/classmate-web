@@ -15,10 +15,17 @@ return new class extends Migration
             $table->id();
 
             $table->unsignedBigInteger('course_id');
-            $table->foreign('course_id')->references('id')->on('courses');
+            $table->foreign('course_id')->references('id')->on('courses')->onDelete('cascade');
 
             $table->unsignedBigInteger('user_id');
-            $table->foreign('user_id')->references('id')->on('users');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+
+            // Add a composite unique key to prevent duplicate entries for the same course and user
+            $table->unique(['course_id', 'user_id']);
+
+            // Add indexes to improve query performance for course_id and user_id
+            $table->index('course_id');
+            $table->index('user_id');
             
             $table->timestamps();
         });

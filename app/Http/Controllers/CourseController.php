@@ -36,7 +36,7 @@ class CourseController extends Controller
     {
         Validator::make($data, [
             // Course validation
-            'code'                                  => 'required|regex:/^\d{4}[A-Z]{3}$|unique:courses,code',
+            'code'                                  => 'required|string|regex:/^\d{4}[A-Z]{3}$|unique:courses,code',
             'name'                                  => 'required|string|max:100',
             
             // Assessments validation
@@ -57,12 +57,23 @@ class CourseController extends Controller
 
             // Students validation
             'students'                              => 'array',
-            'students.*.snumber'                    => 'required|regex:/^S\d{4}$/',
+            'students.*.snumber'                    => 'required|string|regex:/^S\d{4}$/',
         ], [
             'code.regex'                => 'The course code must be 4 digits followed by 3 uppercase letters.',
             'assessments.*.type.in'     => 'Assessment type must be either student-select or teacher-assign.',
             'students.*.snumber.regex'  => 'The student number must follow the format "S####".',
         ])->validate();
+    }
+
+    private function attachStudentsToCourse($course, $studentIds) {
+        // Attach students to the course without creating duplicates
+        $course->users()->syncWithoutDetaching($studentIds);
+        
+        // Attach students to the course assessments without creating duplicates
+        $assessments = $course->assessments;
+        foreach ($assessments as $assessment) {
+            $assessment->students()->syncWithoutDetaching($studentIds);
+        }
     }
 
     /**
@@ -109,13 +120,16 @@ class CourseController extends Controller
             ]);
         }
         
-        // Attach teachers to the course using their staff number (snumber)
+        // Attach teachers to the course using their staff number (snumber) without creating duplicates
         foreach ($data['teachers'] as $teacherNum) {
             $teacher = User::where('snumber', $teacherNum)->firstOrFail();
-            $course->users()->attach($teacher->id);
+            $course->users()->syncWithoutDetaching($teacher->id);
         }
 
-        // Attach students to the course, creating new users if they don't exist
+        // Array to collect student IDs
+        $studentIds = [];
+
+        // Create students or retrieve existing ones
         $assessments = $course->assessments;
         foreach ($data['students'] as $studentNum) {
             $student = User::firstOrCreate(
@@ -128,14 +142,11 @@ class CourseController extends Controller
                     'remember_token'    => Str::random(10),
                 ]
             );
-
-            // Attach the student to the course and all course assessments
-            $course->users()->attach($student->id);
-            
-            foreach ($assessments as $assessment) {
-                $assessment->students()->attach($student->id);
-            }
+            $studentIds[] = $student->id;
         }
+
+        // Attach students to the course and associated assessments without creating duplicates
+        $this->attachStudentsToCourse($course, $studentIds);
         
         // Redirect to the course details page after creation
         return redirect()->route('course.show', $course);
@@ -173,22 +184,15 @@ class CourseController extends Controller
      */
     public function enroll(Request $request, Course $course)
     {
+        // Validate the students input
         $request->validate([
             'students' => 'required|array',
             'students.*' => 'exists:users,id',
         ]);
-        
-        $studentIds = $request->students;
-        
-        $course->users()->attach($studentIds);
-        
-        $assessments = $course->assessments;
-        foreach ($studentIds as $student) {
-            foreach ($assessments as $assessment) {
-                $assessment->students()->attach($student);
-            }
-        }
-
-        return redirect()->route('course.enrollPage', $course);
+    
+        // Attach students to the course and associated assessments without creating duplicates
+        $this->attachStudentsToCourse($course, $request->students);
+    
+        return redirect()->route('course.show', $course);
     }
 }

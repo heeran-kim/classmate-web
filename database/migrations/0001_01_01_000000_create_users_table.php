@@ -15,8 +15,8 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('email')->nullable();
-            $table->string('type');
-            $table->string('snumber')->unique();
+            $table->enum('type', ['student', 'teacher']);
+            $table->string('snumber', 5)->unique();
             $table->string('password');
             $table->rememberToken();
             $table->timestamps();
