@@ -17,10 +17,10 @@ return new class extends Migration
             $table->integer('rating')->nullable();
 
             $table->unsignedBigInteger('reviewee_id');
-            $table->foreign('reviewee_id')->references('id')->on('users');
+            $table->foreign('reviewee_id')->references('id')->on('users')->onDelete('cascade');
 
             $table->unsignedBigInteger('assessment_student_id');
-            $table->foreign('assessment_student_id')->references('id')->on('assessment_student');
+            $table->foreign('assessment_student_id')->references('id')->on('assessment_student')->onDelete('cascade');
 
             $table->timestamps();
         });
