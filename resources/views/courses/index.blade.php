@@ -1,12 +1,12 @@
 <x-master-layout title="| Courses">
     <div class="container">
 
-        <div class="d-flex justify-content-between">
-            <h3 class="ms-1 mb-3">Courses ({{count($courses)}})</h3>
+        <div class="d-flex justify-content-between mb-3">
+            <h3 class="ms-1">Courses ({{count($courses)}})</h3>
             @if (Auth::user()->type == 'teacher')
-            <a href="{{ route('course.create') }}" class="text-decoration-none text-reset">
-                <button class="btn btn-primary mt-3">Create</button>
-            </a>
+                <a href="{{ route('course.create') }}" class="text-decoration-none text-reset">
+                    <button class="btn btn-primary">Create</button>
+                </a>
             @endif
         </div>
 
