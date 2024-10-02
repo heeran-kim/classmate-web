@@ -56,8 +56,8 @@ class AssessmentsTableSeeder extends Seeder
         $courses = Course::where('id', '>=', '3')->get();
         foreach ($courses as $course) {
             DB::table('assessments')->insert([
-                'title' => 'Course 2 Assessment 1',
-                'instruction' => 'Instructions for Assessment 1 of Course 2.',
+                'title' => 'Assessment 1',
+                'instruction' => 'Instructions for Assessment 1.',
                 'num_required_reviews' => 3,
                 'max_score' => 50,
                 'due_date' => now()->addDays(7), // Due in 7 days
@@ -68,8 +68,8 @@ class AssessmentsTableSeeder extends Seeder
             ]);
 
             DB::table('assessments')->insert([
-                'title' => 'Course 2 Assessment 2',
-                'instruction' => 'Instructions for Assessment 2 of Course 2.',
+                'title' => 'Assessment 2',
+                'instruction' => 'Instructions for Assessment.',
                 'num_required_reviews' => 3,
                 'max_score' => 50,
                 'due_date' => now()->addDays(14), // Due in 14 days
