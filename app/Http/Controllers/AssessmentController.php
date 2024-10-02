@@ -26,12 +26,12 @@ class AssessmentController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'title'                 => 'required|max:20',
+            'title'                 => 'required|string|max:20',
             'num_required_reviews'  => 'required|integer|min:1',
             'max_score'             => 'required|integer|min:1|max:100',
             'due_date'              => 'required|date',
             'type'                  => 'required|in:student-select,teacher-assign',
-            'course_id'             => 'exists:courses,id'
+            'course_id'             => 'required|exists:courses,id'
         ], [
             'type.in' => 'Assessment type must be either student-select or teacher-assign.'
         ]);
@@ -100,11 +100,13 @@ class AssessmentController extends Controller
     public function update(Request $request, Assessment $assessment)
     {
         $request->validate([
-            'title'                 => 'required|max:20',
+            'title'                 => 'required|string|max:20',
             'num_required_reviews'  => 'required|integer|min:1',
             'max_score'             => 'required|integer|min:1|max:100',
-            'due_date'              => 'required',
+            'due_date'              => 'required|date',
             'type'                  => 'required|in:student-select,teacher-assign'
+        ], [
+            'type.in' => 'Assessment type must be either student-select or teacher-assign.'
         ]);
         
         $assessment->title                  = $request->title;
