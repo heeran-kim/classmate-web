@@ -19,8 +19,8 @@ class UsersTableSeeder extends Seeder
         // Seed 5 teachers
         for ($i = 0; $i < 5; $i++) {
             DB::table('users')->insert([
-                'name' => $faker->name,  // Use Faker to generate random name
-                'email' => $faker->unique()->safeEmail,  // Use Faker to generate random unique email
+                'name' => $faker->name,
+                'email' => $faker->unique()->safeEmail,
                 'type' => 'teacher',
                 'snumber' => 'S1' . str_pad($i, 3, '0', STR_PAD_LEFT), // S1000, S1001, etc.
                 'password' => Hash::make('password'),
@@ -31,8 +31,8 @@ class UsersTableSeeder extends Seeder
         // Seed 50 students
         for ($i = 0; $i < 50; $i++) {
             DB::table('users')->insert([
-                'name' => $faker->name,  // Use Faker to generate random name
-                'email' => $faker->unique()->safeEmail,  // Use Faker to generate random unique email
+                'name' => $faker->name,
+                'email' => $faker->unique()->safeEmail,
                 'type' => 'student',
                 'snumber' => 'S0' . str_pad($i, 3, '0', STR_PAD_LEFT), // S0000, S0001, etc.
                 'password' => Hash::make('password'),

@@ -39,7 +39,7 @@ class AssessmentStudentTableSeeder extends Seeder
                 ->where('assessment_id', $assessment->id)
                 ->where('student_id', $randomStudent->user_id)
                 ->update([
-                    'score' => rand(0, $assessment->max_score),  // Assign random score, ensuring it does not exceed the max score
+                    'score' => rand(0, $assessment->max_score),
                     'updated_at' => now(),
                 ]);
         }

@@ -35,7 +35,7 @@ class CourseUserTableSeeder extends Seeder
 
         $courses = Course::all();
         foreach ($courses as $course) {
-            $numStudentsToEnroll = rand(15, 45);
+            $numStudentsToEnroll = rand(0, 45);
             $randomUsersIds = array_rand($studentsIds, $numStudentsToEnroll);
             
             foreach ($randomUsersIds as $randomIndex) {

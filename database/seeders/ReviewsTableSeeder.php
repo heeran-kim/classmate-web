@@ -19,7 +19,7 @@ class ReviewsTableSeeder extends Seeder
         $assessments = DB::table('assessments')->get();
 
         foreach ($assessments as $assessment) {
-            // Get all students enrolled in the same course (ignoring whether they have scores)
+            // Get all students enrolled in the same course
             $studentsInCourse = DB::table('course_user')
                 ->join('users', 'course_user.user_id', '=', 'users.id')
                 ->where('course_user.course_id', $assessment->course_id)
