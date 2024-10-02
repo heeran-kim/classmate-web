@@ -47,7 +47,7 @@ class AssessmentController extends Controller
         ]);
 
         $students = $assessment->course->students->pluck('id');
-        $assessment->students()->attach($students);
+        $assessment->students()->syncWithoutDetaching($students);
 
         return redirect()->route('assessment.show', $assessment);
     }

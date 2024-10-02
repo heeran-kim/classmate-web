@@ -22,10 +22,6 @@ return new class extends Migration
 
             // Add a composite unique key to prevent duplicate entries for the same course and user
             $table->unique(['course_id', 'user_id']);
-
-            // Add indexes to improve query performance for course_id and user_id
-            $table->index('course_id');
-            $table->index('user_id');
             
             $table->timestamps();
         });

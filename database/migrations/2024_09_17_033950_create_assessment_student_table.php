@@ -16,11 +16,14 @@ return new class extends Migration
             $table->integer('score')->nullable();
             
             $table->unsignedBigInteger('assessment_id');
-            $table->foreign('assessment_id')->references('id')->on('assessments');
+            $table->foreign('assessment_id')->references('id')->on('assessments')->onDelete('cascade');
 
             $table->unsignedBigInteger('student_id');
-            $table->foreign('student_id')->references('id')->on('users');
+            $table->foreign('student_id')->references('id')->on('users')->onDelete('cascade');
             
+            // Add a composite unique key to prevent duplicate entries for the same assessment and student
+            $table->unique(['assessment_id', 'student_id']);
+
             $table->timestamps();
         });
     }
