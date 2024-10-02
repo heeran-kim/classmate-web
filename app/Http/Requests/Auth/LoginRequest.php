@@ -27,7 +27,7 @@ class LoginRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'snumber'   => 'required|string|regex:/^S\d{4}$/|unique:users,snumber',
+            'snumber'   => 'required|string|regex:/^S\d{4}$/',
             'password'  => 'required|string',
         ];
     }
