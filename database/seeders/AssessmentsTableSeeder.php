@@ -13,7 +13,7 @@ class AssessmentsTableSeeder extends Seeder
     public function run(): void
     {
         // Assessments for 3 courses (3 assessments with max scores: 30, 30, 40)
-        $courses = Course::where('id', '<', '3');
+        $courses = Course::where('id', '<', '3')->get();
         foreach ($courses as $course) {
             DB::table('assessments')->insert([
                 'title' => 'Assessment 1',
@@ -53,7 +53,7 @@ class AssessmentsTableSeeder extends Seeder
         }
 
         // Assessments for 2 courses (2 assessments with max scores: 50, 50)
-        $courses = Course::where('id', '>=', '3');
+        $courses = Course::where('id', '>=', '3')->get();
         foreach ($courses as $course) {
             DB::table('assessments')->insert([
                 'title' => 'Course 2 Assessment 1',
