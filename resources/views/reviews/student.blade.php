@@ -13,7 +13,7 @@
                 @if (count($reviewsSubmitted))
                     <ul>
                         @foreach ($reviewsSubmitted as $review)
-                        <li><span class="fw-bold">{{$review->reviewee->name}}: </span>{{$review->text}}</li>
+                        <li><span class="fw-bold"><x-rating :rating="$review->rating" /> {{$review->reviewee->name}}: </span>{{$review->text}}</li>
                         @endforeach
                     </ul>
                 @else
@@ -25,7 +25,7 @@
                 @if (count($reviewsSubmitted))
                     <ul>
                         @foreach ($reviewsReceived as $review)
-                            <li><span class="fw-bold">{{$review->reviewer->name}}: </span>{{$review->text}}</li>
+                            <li><span class="fw-bold"><x-rating :rating="$review->rating" /> {{$review->reviewer->name}}: </span>{{$review->text}}</li>
                         @endforeach
                     </ul>
                 @else

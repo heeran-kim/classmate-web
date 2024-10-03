@@ -2,16 +2,44 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use Illuminate\Validation\Rule;
-use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 use App\Models\Review;
 use App\Models\Assessment;
+use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 use App\Models\AssessmentStudent;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 
 class ReviewController extends Controller
 {
+    /**
+     * Display a listing of the course.
+     */
+    public function index(Assessment $assessment)
+    {
+        $sort = request('sort') ?? 'rating-desc';
+        switch ($sort) {
+            case 'rating-asc':
+                $orderByCol = 'rating';
+                $orderByDir = 'asc';
+                break;
+            case 'rating-desc':
+            default:
+                $orderByCol = 'rating';
+                $orderByDir = 'desc';
+                break;
+        }
+        
+        $reviews = $assessment->reviews()
+                              ->orderBy($orderByCol, $orderByDir)
+                              ->paginate(10);
+
+        
+
+        return view('reviews.index', compact('reviews', 'reviewers', 'assessment', 'sort'));
+    }
+
     /**
      * Store a newly created resource in storage.
      */

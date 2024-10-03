@@ -28,6 +28,7 @@ Route::middleware(['auth', EnsureProfileComplete::class])->group(function () {
     Route::get('/', [CourseController::class, 'index'])->name('dashboard');
     Route::resource('course', CourseController::class)->only(['index', 'show']);
     Route::resource('assessment', AssessmentController::class)->only(['show']);
+    Route::resource('assessment.review', ReviewController::class)->only(['index']);
 });
 
 Route::middleware('auth')->group(function () {

@@ -1,7 +1,15 @@
 <x-master-layout title="| {{$assessment->title}}">
     <x-course-header :course="$assessment->course">
         @if (Auth::user()->type == 'student')
-            <h4 class="ms-2">{{$assessment->title}}</h4>
+            <div class="d-flex justify-content-between">
+                <h4 class="ms-2">{{$assessment->title}}</h4>
+                <a
+                    href="{{ route('assessment.review.index', ['assessment' => $assessment->id]) }}"
+                    class="text-decoration-none text-reset"
+                >
+                    <button class="btn btn-primary">All Reviews</button>
+                </a>
+            </div>
             <div class="bg-light p-3 border rounded m-3">
                 <h5>Details</h5>
                 <div class="bg-white p-3 border rounded m-3">
@@ -27,43 +35,43 @@
                 @include('assessments.partials.write-peer-review-form')
             </div>
         @else
-        <div class="d-flex justify-content-between">
-            <h4>{{$assessment->title}}</h4>
-            @if($reviewCount === 0)
-                <a
-                    href="{{ route('assessment.edit', ['assessment' => $assessment->id]) }}"
-                    class="text-decoration-none text-reset"
-                >
-                    <button class="btn btn-primary mt-3">Edit</button>
-                </a>
-            @else
-                <button class="btn btn-primary mt-3" disabled>Edit</button>
-            @endif
-        </div>
+            <div class="d-flex justify-content-between">
+                <h4 class="ms-2">{{$assessment->title}}</h4>
+                @if($reviewCount === 0)
+                    <a
+                        href="{{ route('assessment.edit', ['assessment' => $assessment->id]) }}"
+                        class="text-decoration-none text-reset"
+                    >
+                        <button class="btn btn-primary">Edit</button>
+                    </a>
+                @else
+                    <button class="btn btn-primary" disabled>Edit</button>
+                @endif
+            </div>
 
-        @if (count($studentsData))
-            <ul class="list-group m-3">
-            @foreach ($studentsData as $studentData)
-                <a
-                    href="{{ route('student.reviews', ['assessment' => $assessment->id, 'student' => $studentData['id']])}}"
-                    class="text-decoration-none text-reset"
-                >
-                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                        <div class="ms-2 me-auto">
-                            <div class="fw-bold">{{$studentData['name']}}</div>
-                            Submitted: {{$studentData['submitted']}} Received: {{$studentData['received']}}
-                        </div>
-                        <div class="badge rounded-pill {{is_null($studentData['score']) ? 'text-bg-primary' : 'text-bg-secondary'}}">
-                            {{$studentData['score'] ?? 0}} / {{$assessment->max_score}}
-                        </div>
-                    </li>
-                </a>
-            @endforeach
-            </ul>
-        @else
-            <div class="text-center">No Students Assigned Yet</div>
-        @endif
-        {{$students->links()}}
+            @if (count($studentsData))
+                <ul class="list-group m-3">
+                @foreach ($studentsData as $studentData)
+                    <a
+                        href="{{ route('student.reviews', ['assessment' => $assessment->id, 'student' => $studentData['id']])}}"
+                        class="text-decoration-none text-reset"
+                    >
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <div class="ms-2 me-auto">
+                                <div class="fw-bold">{{$studentData['name']}}</div>
+                                Submitted: {{$studentData['submitted']}} Received: {{$studentData['received']}}
+                            </div>
+                            <div class="badge rounded-pill {{is_null($studentData['score']) ? 'text-bg-primary' : 'text-bg-secondary'}}">
+                                {{$studentData['score'] ?? 0}} / {{$assessment->max_score}}
+                            </div>
+                        </li>
+                    </a>
+                @endforeach
+                </ul>
+            @else
+                <div class="text-center">No Students Assigned Yet</div>
+            @endif
+            {{$students->links()}}
         @endif
     </x-course-header>
 </x-master-layout>
