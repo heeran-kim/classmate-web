@@ -2,9 +2,11 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Support\Facades\DB;
-use Illuminate\Database\Seeder;
+use App\Models\Assessment;
 use Faker\Factory as Faker;
+use Illuminate\Database\Seeder;
+use App\Models\AssessmentStudent;
+use Illuminate\Support\Facades\DB;
 
 class ReviewsTableSeeder extends Seeder
 {
@@ -15,39 +17,40 @@ class ReviewsTableSeeder extends Seeder
     {
         $faker = Faker::create();  // Create a Faker instance
 
-        // Get all assessments
-        $assessments = DB::table('assessments')->get();
+        // Get assessments with their students
+        $totalCount = Assessment::all()->count();
+        $assessments = Assessment::where('id', '<', $totalCount)
+                                    ->with('students')->get();
 
         foreach ($assessments as $assessment) {
-            // Get all students enrolled in the same course
-            $studentsInCourse = DB::table('course_user')
-                ->join('users', 'course_user.user_id', '=', 'users.id')
-                ->where('course_user.course_id', $assessment->course_id)
-                ->where('users.type', 'student')  // Ensure only students are included
-                ->pluck('course_user.user_id')->toArray();  // Get only student IDs
+            // Get all students in the current assessment
+            $studentsInAssessment = $assessment->students->pluck('id')->toArray();
 
-            // Shuffle and select a random number of reviewees
-            shuffle($studentsInCourse);
+            // Generate reviews for each student in the assessment
+            foreach ($studentsInAssessment as $reviewerId) {
+                // Shuffle the list of students and remove the reviewer from potential reviewees
+                $possibleReviewees = array_diff($studentsInAssessment, [$reviewerId]);
+                shuffle($possibleReviewees);
 
-            // Generate a large number of reviews for each assessment
-            for ($i = 0; $i < 50; $i++) {  // Adjust the number of reviews to generate here
-                $reviewerId = $faker->randomElement($studentsInCourse);  // Pick a random reviewer
-                $revieweeId = $faker->randomElement($studentsInCourse);  // Pick a random reviewee
+                // Pick the first 3 unique reviewees from the shuffled list
+                $reviewees = array_slice($possibleReviewees, 0, 3);
 
-                // Ensure that the reviewer is not the same as the reviewee
-                while ($reviewerId === $revieweeId) {
-                    $revieweeId = $faker->randomElement($studentsInCourse);
+                // Get the AssessmentStudent record for the current reviewer
+                $assessmentStudent = AssessmentStudent::where('assessment_id', $assessment->id)
+                                                        ->where('student_id', $reviewerId)
+                                                        ->first();
+
+                // Create a review for each of the 3 selected reviewees
+                foreach ($reviewees as $revieweeId) {
+                    DB::table('reviews')->insert([
+                        'text' => $faker->sentence(10),  // Generate random sentence with 10 words
+                        'rating' => rand(1, 5),  // Random rating between 1 and 5
+                        'reviewee_id' => $revieweeId,  // Assign the reviewee
+                        'assessment_student_id' => $assessmentStudent->id,  // Assign the assessment_student_id of the reviewer
+                        'created_at' => now(),
+                        'updated_at' => now(),
+                    ]);
                 }
-
-                // Insert the review with varied review text
-                DB::table('reviews')->insert([
-                    'text' => $faker->sentence(10),  // Generate random sentence with 10 words
-                    'rating' => rand(1, 5),  // Random rating between 1 and 5
-                    'reviewee_id' => $revieweeId,
-                    'assessment_student_id' => $faker->randomElement($studentsInCourse),  // Random assessment_student_id
-                    'created_at' => now(),
-                    'updated_at' => now(),
-                ]);
             }
         }
     }
