@@ -18,7 +18,8 @@ class ReviewController extends Controller
     public function store(Request $request, Assessment $assessment)
     {
         $reviewer = Auth::user();
-        $reviewedStudentIds = $reviewer->reviewsSubmitted()->pluck('reviewee_id');
+        $reviewsSubmitted = $reviewer->reviewsSubmittedForAssessment($assessment->id)->get();
+        $reviewedStudentIds = $reviewsSubmitted->pluck('reviewee_id');
 
         $request->validate([
             'review'    => 'required|regex:/^\s*\S+(?:\s+\S+){4,}\s*$/',

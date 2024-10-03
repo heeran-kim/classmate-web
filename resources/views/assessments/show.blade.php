@@ -35,30 +35,7 @@
                         <div class="text-center">No Reviews Received Yet</div>
                     @endif
                 </div>
-                <h5>Write Peer Review</h5>
-                <form method="POST" action="{{ route('assessment.review.store', ['assessment' => $assessment->id]) }}">
-                    @csrf
-                    <div class="row m-2">
-                        <div class="col-12 col-sm-6">
-                            <x-input-label for="reviewee" :value="__('Reviewee')" />
-                            <select name="reviewee" class="form-select d-block mt-1 w-100 shadow-sm">
-                                @foreach ($potentialReviewees as $potentialReviewee)
-                                <option value="{{$potentialReviewee->id}}" {{old('reviewee') == $potentialReviewee->id ? 'selected' : ''}}>
-                                    {{$potentialReviewee->snumber}} {{$potentialReviewee->name}} {{ $reviewedStudentIds->contains($potentialReviewee->id) ? '(reviewed)' : '' }}
-                                </option>
-                                @endforeach
-                            </select>
-                            <x-input-error :messages="$errors->get('reviewee')" class="mt-2" />
-                        </div>
-                        <div class="col-12 col-sm-6">
-                            <x-input-label for="review" :value="__('Review')" />
-                            <x-text-input id="review" class="d-block mt-1 w-100" name="review" :value="old('review')" />
-                            <x-input-error :messages="$errors->get('review')" class="mt-2" />
-
-                        </div>
-                    </div>
-                    <button type="submit" class="btn btn-primary mx-3">Submit</button>
-                </form>
+                @include('assessments.partials.write-peer-review-form')
             </div>
         @else
         <div class="d-flex justify-content-between">
