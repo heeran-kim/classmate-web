@@ -1,4 +1,9 @@
-<h5>Write Peer Review</h5>
+<div class="d-flex align-items-center justify-content-start mt-4">
+    <h5>Write Peer Review</h5>
+    <a class="underline text-sm text-gray-600 ms-5" href="{{ route('user.rank') }}">
+        {{ __('Check Out the Best Reviewers') }}
+    </a>
+</div>
 <form method="POST" action="{{ route('assessment.review.store', ['assessment' => $assessment->id]) }}" class="bg-white p-3 border rounded m-3">
     @csrf
     {{-- REVIEWEE --}}

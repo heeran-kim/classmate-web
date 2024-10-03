@@ -1,15 +1,7 @@
 <x-master-layout title="| {{$assessment->title}}">
     <x-course-header :course="$assessment->course">
         @if (Auth::user()->type == 'student')
-            <div class="d-flex justify-content-between">
-                <h4 class="ms-2">{{$assessment->title}}</h4>
-                <a
-                    href="{{ route('assessment.review.index', ['assessment' => $assessment->id]) }}"
-                    class="text-decoration-none text-reset"
-                >
-                    <button class="btn btn-primary">All Reviews</button>
-                </a>
-            </div>
+            <h4 class="ms-2">{{$assessment->title}}</h4>
             <div class="bg-light p-3 border rounded m-3">
                 <h5>Details</h5>
                 <div class="bg-white p-3 border rounded m-3">

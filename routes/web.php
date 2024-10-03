@@ -9,6 +9,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\AssessmentController;
 use App\Http\Controllers\Auth\PasswordController;
 use App\Http\Middleware\EnsureProfileComplete;
+use App\Models\Review;
 
 Route::middleware(['auth', TeacherMiddleware::class])->group(function () {
     Route::resource('assessment', AssessmentController::class)->only(['create', 'store', 'edit', 'update']);
@@ -28,7 +29,7 @@ Route::middleware(['auth', EnsureProfileComplete::class])->group(function () {
     Route::get('/', [CourseController::class, 'index'])->name('dashboard');
     Route::resource('course', CourseController::class)->only(['index', 'show']);
     Route::resource('assessment', AssessmentController::class)->only(['show']);
-    Route::resource('assessment.review', ReviewController::class)->only(['index']);
+    Route::get('user/rank', [UserController::class, 'rank'])->name('user.rank');
 });
 
 Route::middleware('auth')->group(function () {
