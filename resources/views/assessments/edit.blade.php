@@ -4,7 +4,7 @@
             href="{{ route('assessment.show', ['assessment' => $assessment->id]) }}"
             class="text-decoration-none text-reset"
         >
-            <h4>{{$assessment->title}}</h4>
+            <h4 class="ms-2">{{$assessment->title}}</h4>
         </a>
         <div class="bg-light p-3 border rounded shadow-sm m-3">
             <h5 class="text-center m-3">Edit Assessment</h5>

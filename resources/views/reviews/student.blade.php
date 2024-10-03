@@ -4,7 +4,7 @@
             href="{{ route('assessment.show', ['assessment' => $assessment->id]) }}"
             class="text-decoration-none text-reset"
         >
-            <h4>{{$assessment->title}}</h4>
+            <h4 class="ms-2">{{$assessment->title}}</h4>
         </a>
         <div class="bg-light p-3 border rounded shadow-sm m-3">
             <h5>{{$student->name}}</h5>
@@ -32,19 +32,7 @@
                 <div class="text-center">No Reviews Received Yet</div>
                 @endif
             </div>
-            <h6>Assign Score</h6>
-            <form method="POST" action=" {{ route('assessment.assignScore', ['assessment' => $assessment->id, 'student' => $student->id]) }} ">
-                @csrf
-                <div>
-                    <input class="bg-white p-2 border rounded my-3 ms-3 text-center" name="score" value="{{old('score', $score)}}" style="width: 70px;"></input>
-                    / {{$assessment->max_score}}
-                    {{-- todo: error --}}
-                    @if ($errors->has('score'))
-                        <small class="text-danger"> {{ $errors->first('score') }}</small>
-                    @endif
-                </div>
-                <button type="submit" class="btn btn-primary mx-3">Submit</button>
-            </form>
+            @include('reviews.partials.assign-score-form')
         </div>
     </x-course-header>
 </x-master-layout>

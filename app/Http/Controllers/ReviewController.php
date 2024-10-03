@@ -55,4 +55,19 @@ class ReviewController extends Controller
         
         return view("reviews.student", compact('assessment', 'student', 'reviewsSubmitted', 'reviewsReceived', 'score'));
     }
+
+    public function rating(Request $request){
+        $request->validate([
+            'rating.*' => 'nullable|integer|min:1|max:5',
+        ]);
+        $reviewIds = $request->reviewsId;
+        $ratings = $request->rating;
+        foreach ($reviewIds as $index => $reviewId) {
+            $review = Review::findOrFail($reviewId);
+            $review->rating = $ratings[$index];
+            $review->save();
+        }
+        
+        return redirect()->back();
+    }
 }

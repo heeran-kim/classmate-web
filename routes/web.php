@@ -21,6 +21,7 @@ Route::middleware(['auth', TeacherMiddleware::class])->group(function () {
 
 Route::middleware(['auth', StudentMiddleware::class])->group(function () {
     Route::resource('assessment.review', ReviewController::class)->only(['store']);
+    Route::post('review/rating', [ReviewController::class, 'rating'])->name('review.rating');
 });
 
 Route::middleware(['auth', EnsureProfileComplete::class])->group(function () {

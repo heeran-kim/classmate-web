@@ -1,7 +1,7 @@
 <x-master-layout title="| {{$assessment->title}}">
     <x-course-header :course="$assessment->course">
         @if (Auth::user()->type == 'student')
-            <h4>{{$assessment->title}}</h4>
+            <h4 class="ms-2">{{$assessment->title}}</h4>
             <div class="bg-light p-3 border rounded m-3">
                 <h5>Details</h5>
                 <div class="bg-white p-3 border rounded m-3">
@@ -23,18 +23,7 @@
                         <div class="text-center">No Reviews Submitted Yet</div>
                     @endif
                 </div>
-                <h5>Peer Review Received: {{count($reviewsReceived)}}</h5>
-                <div class="bg-white p-3 border rounded m-3">
-                    @if (count($reviewsReceived))
-                        <ul>
-                            @foreach ($reviewsReceived as $review)
-                                <li><span class="fw-bold">{{$review->reviewer->name}}: </span>{{$review->text}}</li>
-                            @endforeach
-                        </ul>
-                    @else
-                        <div class="text-center">No Reviews Received Yet</div>
-                    @endif
-                </div>
+                @include('assessments.partials.received-review-rating-form')
                 @include('assessments.partials.write-peer-review-form')
             </div>
         @else
