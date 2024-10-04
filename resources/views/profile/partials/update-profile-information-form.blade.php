@@ -28,13 +28,13 @@
         </div>
 
         <!-- Email Address -->
-        <div class="mt-4">
+        <div class="my-4">
             <x-input-label for="email" :value="__('Email')" />
             <x-text-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email', Auth::user()->email)" />
             <x-input-error :messages="$errors->get('email')" class="mt-2" />
         </div>
 
-        <x-primary-button class="mt-4">
+        <x-primary-button>
             {{ __('Update') }}
         </x-primary-button>
     </form>

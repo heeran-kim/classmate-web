@@ -12,7 +12,9 @@
                 <x-input-error :messages="$errors->get('rating.' . $loop->index)" class="mt-2" />
             @endforeach
         </ul>
-        <button type="submit" class="btn btn-primary my-3">Submit</button>
+        <x-primary-button class="ms-3">
+            {{ __('Submit') }}
+        </x-primary-button>
     </form>
 @else
     <div class="text-center">No Reviews Received Yet</div>

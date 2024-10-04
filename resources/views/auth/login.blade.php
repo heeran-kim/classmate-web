@@ -1,7 +1,4 @@
 <x-master-layout title="| Login">
-    <!-- Session Status -->
-    <x-auth-session-status class="mb-4" :status="session('status')" />
-
     <div class="container d-flex justify-content-center">
         <div class="w-100 bg-light p-3 border rounded shadow-sm m-3" style="max-width: 500px;">
             <h5 class="text-center m-3">Login</h5>

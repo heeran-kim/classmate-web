@@ -8,5 +8,7 @@
             <small class="text-danger"> {{ $errors->first('score') }}</small>
         @endif
     </div>
-    <button type="submit" class="btn btn-primary mx-3">Submit</button>
+    <x-primary-button class="mx-3">
+        {{ __('Submit') }}
+    </x-primary-button>
 </form>

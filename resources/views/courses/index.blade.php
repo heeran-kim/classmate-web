@@ -1,12 +1,11 @@
 <x-master-layout title="| Courses">
     <div class="container">
-
         <div class="d-flex justify-content-between mb-3">
             <h3 class="ms-1">Courses ({{count($courses)}})</h3>
             @if (Auth::user()->type == 'teacher')
-                <a href="{{ route('course.create') }}" class="text-decoration-none text-reset">
-                    <button class="btn btn-primary">Create</button>
-                </a>
+                <x-primary-button route="course.create">
+                    Create Course
+                </x-primary-button>
             @endif
         </div>
 
@@ -33,7 +32,5 @@
         @else
             <div class="text-center">No Courses Enrolled Yet</div>
         @endif
-
-
     </div>
 </x-master-layout>

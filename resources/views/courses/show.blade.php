@@ -39,8 +39,12 @@
         @endif
         
         @if (Auth::user()->type == 'teacher')
-        <a href="{{ route('course.enrollPage', ['course' => $course->id]) }}"><button type="button" class="btn btn-outline-primary me-2">Enroll Student</button></a>
-        <a href="{{ route('assessment.create', ['courseId' => $course->id]) }}"><button type="button" class="btn btn-outline-primary">Create Assessment</button></a>
+            <x-primary-button route="course.enrollPage" :routeParams="['course' => $course->id]" class="me-2">
+                {{ __('Enroll Student') }}
+            </x-primary-button>
+            <x-primary-button route="assessment.create" :routeParams="['courseId' => $course->id]">
+                {{ __('Create Assessment') }}
+            </x-primary-button>
         @endif
     </x-course-header>
 </x-master-layout>
