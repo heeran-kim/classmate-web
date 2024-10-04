@@ -2,16 +2,17 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use App\Models\User;
 
 class UserController extends Controller
 {
     /**
      * Display highest reviewers
      */
-    public function index()
+    public function rank()
     {
-        $courses = User::where('type', 'student');
-        return view('courses.index', compact('courses'));
+        
+        return view('users.rank', compact('reviewers'));
     }
+    
 }

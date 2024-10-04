@@ -1,15 +1,15 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\UserController;
 use App\Http\Controllers\CourseController;
 use App\Http\Controllers\ReviewController;
 use App\Http\Middleware\StudentMiddleware;
 use App\Http\Middleware\TeacherMiddleware;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\AssessmentController;
-use App\Http\Controllers\Auth\PasswordController;
 use App\Http\Middleware\EnsureProfileComplete;
-use App\Models\Review;
+use App\Http\Controllers\Auth\PasswordController;
 
 Route::middleware(['auth', TeacherMiddleware::class])->group(function () {
     Route::resource('assessment', AssessmentController::class)->only(['create', 'store', 'edit', 'update']);

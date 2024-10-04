@@ -1,6 +1,6 @@
-<div class="d-flex align-items-center justify-content-start mt-4">
+<div class="d-flex align-items-center justify-content-between mt-4">
     <h5>Write Peer Review</h5>
-    <a class="underline text-sm text-gray-600 ms-5" href="{{ route('user.rank') }}">
+    <a class="underline text-sm text-gray-600" href="{{ route('user.rank') }}">
         {{ __('Check Out the Best Reviewers') }}
     </a>
 </div>

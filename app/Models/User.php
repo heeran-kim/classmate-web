@@ -81,5 +81,9 @@ class User extends Authenticatable
     function assessments() {
         return $this->belongsToMany(Assessment::class);
     }
-    
+
+    function getAverageRating() {
+        $averageRatings = $this->reviewsSubmitted()->average('rating');
+        return $averageRatings;
+    }
 }

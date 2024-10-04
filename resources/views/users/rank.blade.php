@@ -11,7 +11,6 @@
             <div class="text-center">No Ratings Given Yet</div>
         @endif
         <div class="d-flex justify-content-center">
-            {{$reviewers->links()}}
         </div>
     </div>
 </x-master-layout>
