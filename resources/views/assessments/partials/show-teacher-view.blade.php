@@ -1,9 +1,6 @@
 <div class="d-flex justify-content-between">
     <h4 class="ms-2">{{$assessment->title}}</h4>
     <div>
-        <x-primary-button route="assessment.assignStudentForm" :routeParams="['assessment' => $assessment->id]">
-            {{ __('Assign') }}
-        </x-primary-button>
         @if(!$reviewCount)
             <x-primary-button route="assessment.edit" :routeParams="['assessment' => $assessment->id]">
                 {{ __('Edit') }}
