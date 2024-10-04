@@ -86,4 +86,9 @@ class User extends Authenticatable
         $averageRatings = $this->reviewsSubmitted()->average('rating');
         return $averageRatings;
     }
+
+    function getTop5Reviews() {
+        $top5Reviews = $this->reviewsSubmitted()->orderBy('rating', 'desc')->limit(5)->get();
+        return $top5Reviews;
+    }
 }
