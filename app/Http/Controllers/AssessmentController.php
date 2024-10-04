@@ -131,4 +131,9 @@ class AssessmentController extends Controller
         $assessment->students()->updateExistingPivot($student->id, ['score' => $request->score]);
         return redirect()->back();
     }
+
+    public function assignStudentForm(Assessment $assessment)
+    {
+        return view("assessments.assign-student")->with('assessment', $assessment)->with('course', $assessment->course);
+    }
 }

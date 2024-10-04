@@ -13,7 +13,10 @@ use App\Http\Controllers\Auth\PasswordController;
 
 Route::middleware(['auth', TeacherMiddleware::class])->group(function () {
     Route::resource('assessment', AssessmentController::class)->only(['create', 'store', 'edit', 'update']);
+    Route::get('assessment/{assessment}/assign', [AssessmentController::class, 'assignStudentForm'])->name('assessment.assignStudentForm');
+    Route::post('assessment/{assessment}/assign', [AssessmentController::class, 'assignStudent'])->name('assessment.assignStudent');
     Route::post('assessment/{assessment}/student/{student}', [AssessmentController::class, 'assignScore'])->name('assessment.assignScore');
+    Route::get('assessment/{assessment}/student/{student}/reviews', [ReviewController::class, 'showStudentReviews'])->name('student.reviews');
     Route::get('assessment/{assessment}/student/{student}/reviews', [ReviewController::class, 'showStudentReviews'])->name('student.reviews');
     Route::resource('course', CourseController::class)->only(['create', 'store']);
     Route::get('course/{course}/enroll', [CourseController::class, 'enrollPage'])->name('course.enrollPage');
