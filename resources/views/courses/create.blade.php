@@ -10,10 +10,10 @@
                 <x-input-error :messages="$errors->get('jsonFile')" class="mt-2" />
 
                 <x-input-label for="image" class="mt-2" :value="__('Input Course Image File:')" />
-                <input type="file" class="form-control" name="image">
-                <x-input-error :messages="$errors->get('image')" class="mt-2" />
+                <input type="file" class="form-control mb-2" name="image">
+                <x-input-error :messages="$errors->get('image')" class="my-2" />
 
-                <x-primary-button class="mt-3">
+                <x-primary-button>
                     {{ __('Create') }}
                 </x-primary-button>
                 

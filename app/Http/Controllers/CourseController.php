@@ -36,7 +36,7 @@ class CourseController extends Controller
     {
         Validator::make($data, [
             // Course validation
-            'code'                                  => 'required|string|regex:/^\d{4}[A-Z]{3}$|unique:courses,code',
+            'code'                                  => ['required', 'string', 'regex:/^\d{4}[A-Z]{3}$/', 'unique:courses,code'],
             'name'                                  => 'required|string|max:100',
             
             // Assessments validation

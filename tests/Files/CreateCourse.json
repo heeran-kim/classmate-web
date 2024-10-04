@@ -2,7 +2,7 @@
     "name": "Software Technologies",
     "code" : "7810ICT",
     "teachers": [
-        "S1001", "S1003"
+        "S1000", "S1003"
     ],
     "assessments": [
         {
@@ -11,7 +11,7 @@
             "num_required_reviews" : 5,
             "max_score" : 100,
             "due_date" : "2024-09-30 23:59:59",
-            "type" : "student-assign"
+            "type" : "teacher-assign"
         }
     ],
     "students": [
