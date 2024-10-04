@@ -1,6 +1,7 @@
 <h5>Peer Review Received: {{count($reviewsReceived)}}</h5>
+<div class="bg-white p-3 border rounded m-3">
 @if (count($reviewsReceived))
-    <form method="POST" action="{{ route('review.rating') }}" class="bg-white p-3 border rounded m-3">
+    <form method="POST" action="{{ route('review.rating') }}">
         @csrf
         <ul>
             @foreach ($reviewsReceived as $review)
@@ -19,3 +20,4 @@
 @else
     <div class="text-center">No Reviews Received Yet</div>
 @endif
+</div>

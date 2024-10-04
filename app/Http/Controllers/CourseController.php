@@ -49,15 +49,11 @@ class CourseController extends Controller
             
             // Teachers validation
             'teachers'                              => 'required|array|min:1',
-            'teachers.*'                            => ['required', 'exists:users,snumber', 
-                                                            Rule::exists('users', 'type')->where(function ($query) {
-                                                                $query->where('type', 'teacher');
-                                                            }),
-                                                        ],
+            'teachers.*'                            => 'required|exists:users,snumber',
 
             // Students validation
             'students'                              => 'array',
-            'students.*.snumber'                    => 'required|string|regex:/^S\d{4}$/',
+            'students.*'                            => 'required|string|regex:/^S\d{4}$/',
         ], [
             'code.regex'                => 'The course code must be 4 digits followed by 3 uppercase letters.',
             'assessments.*.type.in'     => 'Assessment type must be either student-select or teacher-assign.',
@@ -90,10 +86,10 @@ class CourseController extends Controller
         $file = $request->file('jsonFile');
         $jsonContents = file_get_contents($file->getPathName());
         $data = json_decode($jsonContents, true);
-
+        
         // Validate the data extracted from the JSON file (e.g., course, assessments, teachers, students)
         $this->validateCourseData($data);
-            
+        
         $imageStore = null;
         // Check if an image file is uploaded and store it
         if ($request->hasFile('image')) {

@@ -7,16 +7,19 @@
                 @csrf
                 <x-input-label for="jsonFile" class="mt-2" :value="__('Input Course File:')"  />
                 <input type="file" class="form-control" name="jsonFile">
-                <x-input-error :messages="$errors->get('jsonFile')" class="mt-2" />
 
                 <x-input-label for="image" class="mt-2" :value="__('Input Course Image File:')" />
                 <input type="file" class="form-control mb-2" name="image">
-                <x-input-error :messages="$errors->get('image')" class="my-2" />
+
+                @if (count($errors) > 0)
+                    @foreach ($errors->all() as $error)
+                    <x-input-error :messages="$error" class="my-2" />
+                    @endforeach
+                @endif
 
                 <x-primary-button>
                     {{ __('Create') }}
                 </x-primary-button>
-                
             </form>
         </div>
     </div>
