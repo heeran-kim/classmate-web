@@ -14,7 +14,9 @@
                     @endforeach
                 </ul>
                 <x-input-error :messages="$errors->get('student')" class="mt-2" />
-                <button type="submit" class="btn btn-primary mt-3">Enroll</button>
+                <x-primary-button class="mt-3">
+                    {{ __('Enroll') }}
+                </x-primary-button>
             </form>
         </div>
     </x-course-header>

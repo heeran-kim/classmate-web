@@ -1,7 +1,7 @@
 <div class="d-flex align-items-center justify-content-between mt-4">
     <h5>Write Peer Review</h5>
     <a class="underline text-sm text-gray-600" href="{{ route('user.rank') }}">
-        {{ __('Check Out the Best Reviewers') }}
+        Check Out the Best Reviewers
     </a>
 </div>
 <form method="POST" action="{{ route('assessment.review.store', ['assessment' => $assessment->id]) }}" class="bg-white p-3 border rounded m-3">
@@ -25,5 +25,7 @@
         <textarea id="review" class="form-control shadow-sm rounded d-block mt-1 w-100" rows="3" name="review">{{old('review')}}</textarea>
         <x-input-error :messages="$errors->get('review')" class="mt-2" />
     </div>
-    <button type="submit" class="btn btn-primary my-3">Submit</button>
+    <x-primary-button class="my-3">
+        {{ __('Submit') }}
+    </x-primary-button>
 </form>

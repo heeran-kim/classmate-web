@@ -45,7 +45,9 @@
                     <x-input-error :messages="$errors->get('type')" class="mt-2" />
                 </div>
                 <div class="col-12">
-                    <button type="submit" class="btn btn-primary mt-3">Edit</button>
+                    <x-primary-button class="mt-3">
+                        {{ __('Edit') }}
+                    </x-primary-button>
                 </div>
             </form>
         </div>

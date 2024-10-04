@@ -25,13 +25,13 @@
             <x-input-error :messages="$errors->updatePassword->get('password')" class="mt-2" />
         </div>
 
-        <div class="mt-4">
+        <div class="my-4">
             <x-input-label for="update_password_password_confirmation" :value="__('Confirm Password')" />
             <x-text-input id="update_password_password_confirmation" class="block mt-1 w-full" name="password_confirmation" type="password" />
             <x-input-error :messages="$errors->updatePassword->get('password_confirmation')" class="mt-2" />
         </div>
 
-        <x-primary-button class="mt-4">
+        <x-primary-button>
             {{ __('Update') }}
         </x-primary-button>
     </form>

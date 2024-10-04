@@ -10,20 +10,28 @@
                 </a>
             </div>
     
-            <div class="d-flex algin-items-center">
+            <div class="d-flex align-items-center gap-2">
                 @auth
-                    <div class="row text-end me-2">
+                    <div class="row text-end">
                         <div class="fw-bold text-uppercase">{{ Auth::user()->type }}</div>
                         <div class=>{{ Auth::user()->name }}</div>
                     </div>
-                    <a href="{{route('profile.edit')}}"><button type="button" class="btn btn-outline-primary me-2">Edit</button></a>
-                    <form method="POST" action="{{route('logout')}}">
+                    <x-primary-button route="profile.edit">
+                        {{ __('Edit') }}
+                    </x-primary-button>
+                    <form method="POST" action="{{ route('logout') }}">
                         @csrf
-                        <button type="submit" class="btn btn-outline-primary">Logout</button>
+                        <x-primary-button>
+                            {{ __('Logout') }}
+                        </x-primary-button>
                     </form>
                 @else
-                    <a href="{{route('login')}}"><button type="button" class="btn btn-outline-primary me-2">Log in</button></a>
-                    <a href="{{route('register')}}"><button type="button" class="btn btn-outline-primary">Register</button></a>
+                    <x-primary-button route="login">
+                        {{ __('Log in') }}
+                    </x-primary-button>
+                    <x-primary-button route="register">
+                        {{ __('Register') }}
+                    </x-primary-button>
                 @endauth
             </div>
         </div>

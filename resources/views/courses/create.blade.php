@@ -13,7 +13,9 @@
                 <input type="file" class="form-control" name="image">
                 <x-input-error :messages="$errors->get('image')" class="mt-2" />
 
-                <button type="submit" class="btn btn-primary mt-3">Create</button>
+                <x-primary-button class="mt-3">
+                    {{ __('Create') }}
+                </x-primary-button>
                 
             </form>
         </div>
