@@ -20,12 +20,12 @@
     </div>
 
     {{-- REVIEW TEXT --}}
-    <div class="mt-2">
+    <div class="my-2">
         <x-input-label for="review" :value="__('Review')" />
         <textarea id="review" class="form-control shadow-sm rounded d-block mt-1 w-100" rows="3" name="review">{{old('review')}}</textarea>
         <x-input-error :messages="$errors->get('review')" class="mt-2" />
     </div>
-    <x-primary-button class="my-3">
+    <x-primary-button>
         {{ __('Submit') }}
     </x-primary-button>
 </form>
